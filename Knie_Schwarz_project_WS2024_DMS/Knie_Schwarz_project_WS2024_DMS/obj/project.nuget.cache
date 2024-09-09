@@ -1,16 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "JrQZpO8e5yFPKFp/1INuolDBgujckQWHc+ZlxGrGCdPrFjllUzPTBzm/mvbXGCYWAg18Wuyuo19d9Zqfw+rhqg==",
+  "dgSpecHash": "CokZQE5dBfRnGFyJAykIUf/AIJ6a7509cyeLyl8ZcRR9SIkpaxuPg8nQNj1aGRrSRt2in5MeEojQ3TShAxT2MQ==",
   "success": true,
-  "projectFilePath": "F:\\_FH_Technikum\\_5_Semester\\Softwarekomponentensysteme\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS.csproj",
+  "projectFilePath": "C:\\Users\\deesb\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Maria\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
-    "C:\\Users\\Maria\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
-    "C:\\Users\\Maria\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.19.6\\microsoft.visualstudio.azure.containers.tools.targets.1.19.6.nupkg.sha512",
-    "C:\\Users\\Maria\\.nuget\\packages\\swashbuckle.aspnetcore\\6.4.0\\swashbuckle.aspnetcore.6.4.0.nupkg.sha512",
-    "C:\\Users\\Maria\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.4.0\\swashbuckle.aspnetcore.swagger.6.4.0.nupkg.sha512",
-    "C:\\Users\\Maria\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.4.0\\swashbuckle.aspnetcore.swaggergen.6.4.0.nupkg.sha512",
-    "C:\\Users\\Maria\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.4.0\\swashbuckle.aspnetcore.swaggerui.6.4.0.nupkg.sha512"
+    "C:\\Users\\deesb\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "C:\\Users\\deesb\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\deesb\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.19.6\\microsoft.visualstudio.azure.containers.tools.targets.1.19.6.nupkg.sha512",
+    "C:\\Users\\deesb\\.nuget\\packages\\swashbuckle.aspnetcore\\6.4.0\\swashbuckle.aspnetcore.6.4.0.nupkg.sha512",
+    "C:\\Users\\deesb\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.4.0\\swashbuckle.aspnetcore.swagger.6.4.0.nupkg.sha512",
+    "C:\\Users\\deesb\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.4.0\\swashbuckle.aspnetcore.swaggergen.6.4.0.nupkg.sha512",
+    "C:\\Users\\deesb\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.4.0\\swashbuckle.aspnetcore.swaggerui.6.4.0.nupkg.sha512"
   ],
   "logs": []
 }
