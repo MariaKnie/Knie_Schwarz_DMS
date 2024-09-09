@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\Knie_Schwarz_project_WS2024_DMS.props" />
+</Project>
