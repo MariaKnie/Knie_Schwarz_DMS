@@ -6,32 +6,24 @@ namespace Knie_Schwarz_project_WS2024_DMS.Controllers
     [Route("[controller]")]
     public class TodoController : ControllerBase
     {
-        //private static readonly string[] Summaries = new[]
-        //{
-        //    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        //};
+        private Document first;
 
-        //public TodoController()
-        //{
-        //}
+        public TodoController()
+        {
+            first = new Document();
+        }
 
-        //[HttpGet(Name = "GetTodo")]
-        //public IEnumerable<WeatherForecast> Get()
-        //{
-        //    return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        //    {
-        //        Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-        //        TemperatureC = Random.Shared.Next(-20, 55),
-        //        Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        //    })
-        //    .ToArray();
-        //}
+        [HttpGet(Name = "GetTodo")]
+        public string Get()
+        {
+            return first.Title;
+        }
 
-        //[HttpDelete("{id}")]
-        //public IActionResult DeleteId()
-        //{
-        //    var item = _todolist.FirstOrDefault(testc => t.id == id); 
+        [HttpDelete("{id}")]
+        public string DeleteId()
+        {
 
-        //}
+            return first.Id.ToString();
+        }
     }
 }
