@@ -1,6 +1,7 @@
 services:
   rest-api:
     build:
+      context: /Knie_Schwarz_project_WS2024_DMS
       dockerfile: Dockerfile
     volumes:
       - data:/data

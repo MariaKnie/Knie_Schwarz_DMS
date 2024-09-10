@@ -1,9 +1,0 @@
-services:
-  restserver:
-    build:
-      dockerfile: Dockerfile
-    volumes:
-      - data:/data
-    ports:
-      - "8081:8080"
-    

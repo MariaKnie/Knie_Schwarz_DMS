@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Knie_Schwarz_project_WS2024_DMS")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4f07890419ccb2d2cfaab7b105a7fc5ff3055433")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a85d952c8b31cb811cee84338c5c2f3ecab17b3c")]
 [assembly: System.Reflection.AssemblyProductAttribute("Knie_Schwarz_project_WS2024_DMS")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Knie_Schwarz_project_WS2024_DMS")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
