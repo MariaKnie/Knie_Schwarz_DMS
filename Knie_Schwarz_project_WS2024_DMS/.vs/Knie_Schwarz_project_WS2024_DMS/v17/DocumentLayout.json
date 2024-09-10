@@ -1,25 +1,33 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "F:\\_FH_Technikum\\_5_Semester\\Softwarekomponentensysteme\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\",
+  "WorkspaceRootPath": "C:\\Users\\deesb\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1B3A8FE6-6357-4CA1-8AE9-93DC9B1FBA5E}|Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS.csproj|f:\\_fh_technikum\\_5_semester\\softwarekomponentensysteme\\knie_schwarz_doc_management_system\\knie_schwarz_project_ws2024_dms\\knie_schwarz_project_ws2024_dms\\controllers\\todocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{1B3A8FE6-6357-4CA1-8AE9-93DC9B1FBA5E}|Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS.csproj|c:\\users\\deesb\\knie_schwarz_doc_management_system\\knie_schwarz_project_ws2024_dms\\knie_schwarz_project_ws2024_dms\\docker-compose.yml||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{1B3A8FE6-6357-4CA1-8AE9-93DC9B1FBA5E}|Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS.csproj|solutionrelative:knie_schwarz_project_ws2024_dms\\docker-compose.yml||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1B3A8FE6-6357-4CA1-8AE9-93DC9B1FBA5E}|Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS.csproj|c:\\users\\deesb\\knie_schwarz_doc_management_system\\knie_schwarz_project_ws2024_dms\\knie_schwarz_project_ws2024_dms\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{1B3A8FE6-6357-4CA1-8AE9-93DC9B1FBA5E}|Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS.csproj|solutionrelative:knie_schwarz_project_ws2024_dms\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1B3A8FE6-6357-4CA1-8AE9-93DC9B1FBA5E}|Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS.csproj|c:\\users\\deesb\\knie_schwarz_doc_management_system\\knie_schwarz_project_ws2024_dms\\knie_schwarz_project_ws2024_dms\\controllers\\todocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1B3A8FE6-6357-4CA1-8AE9-93DC9B1FBA5E}|Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS.csproj|solutionrelative:knie_schwarz_project_ws2024_dms\\controllers\\todocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1B3A8FE6-6357-4CA1-8AE9-93DC9B1FBA5E}|Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS.csproj|f:\\_fh_technikum\\_5_semester\\softwarekomponentensysteme\\knie_schwarz_doc_management_system\\knie_schwarz_project_ws2024_dms\\knie_schwarz_project_ws2024_dms\\models\\document.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{1B3A8FE6-6357-4CA1-8AE9-93DC9B1FBA5E}|Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS.csproj|c:\\users\\deesb\\knie_schwarz_doc_management_system\\knie_schwarz_project_ws2024_dms\\knie_schwarz_project_ws2024_dms\\models\\document.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1B3A8FE6-6357-4CA1-8AE9-93DC9B1FBA5E}|Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS.csproj|solutionrelative:knie_schwarz_project_ws2024_dms\\models\\document.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1B3A8FE6-6357-4CA1-8AE9-93DC9B1FBA5E}|Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS.csproj|f:\\_fh_technikum\\_5_semester\\softwarekomponentensysteme\\knie_schwarz_doc_management_system\\knie_schwarz_project_ws2024_dms\\knie_schwarz_project_ws2024_dms\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{1B3A8FE6-6357-4CA1-8AE9-93DC9B1FBA5E}|Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS.csproj|c:\\users\\deesb\\knie_schwarz_doc_management_system\\knie_schwarz_project_ws2024_dms\\knie_schwarz_project_ws2024_dms\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1B3A8FE6-6357-4CA1-8AE9-93DC9B1FBA5E}|Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS.csproj|solutionrelative:knie_schwarz_project_ws2024_dms\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1B3A8FE6-6357-4CA1-8AE9-93DC9B1FBA5E}|Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS.csproj|f:\\_fh_technikum\\_5_semester\\softwarekomponentensysteme\\knie_schwarz_doc_management_system\\knie_schwarz_project_ws2024_dms\\knie_schwarz_project_ws2024_dms\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{1B3A8FE6-6357-4CA1-8AE9-93DC9B1FBA5E}|Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS.csproj|c:\\users\\deesb\\knie_schwarz_doc_management_system\\knie_schwarz_project_ws2024_dms\\knie_schwarz_project_ws2024_dms\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1B3A8FE6-6357-4CA1-8AE9-93DC9B1FBA5E}|Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS.csproj|solutionrelative:knie_schwarz_project_ws2024_dms\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1B3A8FE6-6357-4CA1-8AE9-93DC9B1FBA5E}|Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS.csproj|f:\\_fh_technikum\\_5_semester\\softwarekomponentensysteme\\knie_schwarz_doc_management_system\\knie_schwarz_project_ws2024_dms\\knie_schwarz_project_ws2024_dms\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "AbsoluteMoniker": "D:0:0:{1B3A8FE6-6357-4CA1-8AE9-93DC9B1FBA5E}|Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS.csproj|c:\\users\\deesb\\knie_schwarz_doc_management_system\\knie_schwarz_project_ws2024_dms\\knie_schwarz_project_ws2024_dms\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{1B3A8FE6-6357-4CA1-8AE9-93DC9B1FBA5E}|Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS.csproj|solutionrelative:knie_schwarz_project_ws2024_dms\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
@@ -30,45 +38,65 @@
       "DocumentGroups": [
         {
           "DockedWidth": 800,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 1,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "WeatherForecastController.cs",
-              "DocumentMoniker": "F:\\_FH_Technikum\\_5_Semester\\Softwarekomponentensysteme\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\Controllers\\WeatherForecastController.cs",
-              "RelativeDocumentMoniker": "Knie_Schwarz_project_WS2024_DMS\\Controllers\\WeatherForecastController.cs",
-              "ToolTip": "F:\\_FH_Technikum\\_5_Semester\\Softwarekomponentensysteme\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\Controllers\\WeatherForecastController.cs",
-              "RelativeToolTip": "Knie_Schwarz_project_WS2024_DMS\\Controllers\\WeatherForecastController.cs",
-              "ViewState": "AQIAABIAAAAAAAAAAAAmwCEAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-10T09:34:21.469Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Document.cs",
-              "DocumentMoniker": "F:\\_FH_Technikum\\_5_Semester\\Softwarekomponentensysteme\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\Models\\Document.cs",
-              "RelativeDocumentMoniker": "Knie_Schwarz_project_WS2024_DMS\\Models\\Document.cs",
-              "ToolTip": "F:\\_FH_Technikum\\_5_Semester\\Softwarekomponentensysteme\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\Models\\Document.cs",
-              "RelativeToolTip": "Knie_Schwarz_project_WS2024_DMS\\Models\\Document.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-09T15:30:49.244Z",
+              "Title": "Dockerfile",
+              "DocumentMoniker": "C:\\Users\\deesb\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\Dockerfile",
+              "RelativeDocumentMoniker": "Knie_Schwarz_project_WS2024_DMS\\Dockerfile",
+              "ToolTip": "C:\\Users\\deesb\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\Dockerfile",
+              "RelativeToolTip": "Knie_Schwarz_project_WS2024_DMS\\Dockerfile",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAVAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-09-10T14:35:18.682Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "docker-compose.yml",
+              "DocumentMoniker": "C:\\Users\\deesb\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\docker-compose.yml",
+              "RelativeDocumentMoniker": "Knie_Schwarz_project_WS2024_DMS\\docker-compose.yml",
+              "ToolTip": "C:\\Users\\deesb\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\docker-compose.yml",
+              "RelativeToolTip": "Knie_Schwarz_project_WS2024_DMS\\docker-compose.yml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAKAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
+              "WhenOpened": "2024-09-10T14:33:49.959Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "WeatherForecastController.cs",
+              "DocumentMoniker": "C:\\Users\\deesb\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\Controllers\\WeatherForecastController.cs",
+              "RelativeDocumentMoniker": "Knie_Schwarz_project_WS2024_DMS\\Controllers\\WeatherForecastController.cs",
+              "ToolTip": "C:\\Users\\deesb\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\Controllers\\WeatherForecastController.cs",
+              "RelativeToolTip": "Knie_Schwarz_project_WS2024_DMS\\Controllers\\WeatherForecastController.cs",
+              "ViewState": "AQIAABIAAAAAAAAAAAAmwCEAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-10T09:34:21.469Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
+              "Title": "Document.cs",
+              "DocumentMoniker": "C:\\Users\\deesb\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\Models\\Document.cs",
+              "RelativeDocumentMoniker": "Knie_Schwarz_project_WS2024_DMS\\Models\\Document.cs",
+              "ToolTip": "C:\\Users\\deesb\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\Models\\Document.cs",
+              "RelativeToolTip": "Knie_Schwarz_project_WS2024_DMS\\Models\\Document.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-09T15:30:49.244Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "WeatherForecast.cs",
-              "DocumentMoniker": "F:\\_FH_Technikum\\_5_Semester\\Softwarekomponentensysteme\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\WeatherForecast.cs",
+              "DocumentMoniker": "C:\\Users\\deesb\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\WeatherForecast.cs",
               "RelativeDocumentMoniker": "Knie_Schwarz_project_WS2024_DMS\\WeatherForecast.cs",
-              "ToolTip": "F:\\_FH_Technikum\\_5_Semester\\Softwarekomponentensysteme\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\WeatherForecast.cs",
+              "ToolTip": "C:\\Users\\deesb\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\WeatherForecast.cs",
               "RelativeToolTip": "Knie_Schwarz_project_WS2024_DMS\\WeatherForecast.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -76,11 +104,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "ToDoController.cs",
-              "DocumentMoniker": "F:\\_FH_Technikum\\_5_Semester\\Softwarekomponentensysteme\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\Controllers\\ToDoController.cs",
+              "DocumentMoniker": "C:\\Users\\deesb\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\Controllers\\ToDoController.cs",
               "RelativeDocumentMoniker": "Knie_Schwarz_project_WS2024_DMS\\Controllers\\ToDoController.cs",
-              "ToolTip": "F:\\_FH_Technikum\\_5_Semester\\Softwarekomponentensysteme\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\Controllers\\ToDoController.cs",
+              "ToolTip": "C:\\Users\\deesb\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\Controllers\\ToDoController.cs",
               "RelativeToolTip": "Knie_Schwarz_project_WS2024_DMS\\Controllers\\ToDoController.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAbAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -89,11 +117,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "launchSettings.json",
-              "DocumentMoniker": "F:\\_FH_Technikum\\_5_Semester\\Softwarekomponentensysteme\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\Properties\\launchSettings.json",
+              "DocumentMoniker": "C:\\Users\\deesb\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\Properties\\launchSettings.json",
               "RelativeDocumentMoniker": "Knie_Schwarz_project_WS2024_DMS\\Properties\\launchSettings.json",
-              "ToolTip": "F:\\_FH_Technikum\\_5_Semester\\Softwarekomponentensysteme\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\Properties\\launchSettings.json",
+              "ToolTip": "C:\\Users\\deesb\\Knie_Schwarz_Doc_Management_System\\Knie_Schwarz_project_WS2024_DMS\\Knie_Schwarz_project_WS2024_DMS\\Properties\\launchSettings.json",
               "RelativeToolTip": "Knie_Schwarz_project_WS2024_DMS\\Properties\\launchSettings.json",
               "ViewState": "AQIAAAMAAAAAAAAAAAAuwAoAAAAZAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
