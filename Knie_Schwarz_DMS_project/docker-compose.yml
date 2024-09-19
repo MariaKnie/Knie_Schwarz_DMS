@@ -1,0 +1,14 @@
+services:
+  rest-api:
+    image: rest-api
+    build:
+      dockerfile: Knie_Schwarz_DMS_project\Dockerfile
+    #volumes:
+     # - data:/data
+    ports:
+      - "127.0.0.1:8081:8080"
+    
+
+#volumes:
+ # data:
+  #  driver: local

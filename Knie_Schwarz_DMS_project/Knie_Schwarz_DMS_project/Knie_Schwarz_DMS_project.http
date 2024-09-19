@@ -1,0 +1,6 @@
+@Knie_Schwarz_DMS_project_HostAddress = http://localhost:5053
+
+GET {{Knie_Schwarz_DMS_project_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
