@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Knie_Schwarz_DMS_project.props" />
+</Project>

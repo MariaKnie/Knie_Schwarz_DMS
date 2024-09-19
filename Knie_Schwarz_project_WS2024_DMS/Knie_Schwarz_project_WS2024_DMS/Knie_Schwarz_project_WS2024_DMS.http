@@ -1,6 +1,0 @@
-@Knie_Schwarz_project_WS2024_DMS_HostAddress = http://localhost:5108
-
-GET {{Knie_Schwarz_project_WS2024_DMS_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
