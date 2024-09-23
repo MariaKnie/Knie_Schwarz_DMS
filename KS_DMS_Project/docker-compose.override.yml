@@ -1,7 +1,5 @@
-version: '3.4'
-
 services:
-  knie_schwarz_dms_project:
+  asp_rest_api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080

@@ -1,4 +1,4 @@
-namespace Knie_Schwarz_DMS_project
+namespace WebApplicationTest1
 {
     public class WeatherForecast
     {

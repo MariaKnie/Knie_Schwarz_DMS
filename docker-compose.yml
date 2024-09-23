@@ -1,8 +1,0 @@
-version: '3.4'
-
-services:
-  knie_schwarz_dms_project:
-    image: ${DOCKER_REGISTRY-}knieschwarzdmsproject
-    build:
-      context: .
-      dockerfile: Knie_Schwarz_DMS_project/Knie_Schwarz_DMS_project/Dockerfile

@@ -1,0 +1,25 @@
+services:
+  asp_rest_api:
+    image: asp_rest_api_image
+    build:
+      context: ./ASP_Rest_API
+      dockerfile: Dockerfile
+    ports:
+     - "8080:8080"
+     #- "443:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080 # Stellt sicher, dass nur HTTP verwendet wird
+
+  webui:
+    image: web_ui_image
+    build:
+      context: ./WebUI
+      dockerfile: Dockerfile
+    ports:
+     - "80:80"
+    volumes:
+      - ./WebUI/nginx.conf:/etc/nginx/nginx.conf  # Binde die Nginx-Konfigurationsdatei ein
+      - ./WebUI/wwwroot:/app/wwwroot  # Statische Dateien mounten
+    depends_on:
+      - asp_rest_api

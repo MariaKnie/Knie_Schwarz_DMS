@@ -4,10 +4,10 @@
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
     <DockerPublishLocally>False</DockerPublishLocally>
-    <ProjectGuid>98b7beb3-2e3b-4978-bb6a-d19967c730da</ProjectGuid>
+    <ProjectGuid>f20c035d-4f02-4a6c-8397-eac3c9c3daac</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
-    <DockerServiceName>knie_schwarz_dms_project</DockerServiceName>
+    <DockerServiceName>asp_api_demo</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">

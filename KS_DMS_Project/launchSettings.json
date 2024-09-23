@@ -4,7 +4,7 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
-        "knie_schwarz_dms_project": "StartDebugging"
+        "asp_api_demo": "StartDebugging"
       }
     }
   }

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Knie_Schwarz_DMS_project.Controllers
+namespace WebApplicationTest1.Controllers
 {
     [ApiController]
     [Route("[controller]")]
