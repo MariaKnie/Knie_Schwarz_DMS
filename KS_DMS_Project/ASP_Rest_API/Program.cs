@@ -37,7 +37,7 @@ app.UseCors("AllowWebUI");
 //app.UseHttpsRedirection();
 
 // Explicitly listen to HTTP only
-app.Urls.Add("http://*:8080"); // Stelle sicher, dass die App nur HTTP verwendet
+app.Urls.Add("http://*:8081"); // Stelle sicher, dass die App nur HTTP verwendet
 app.UseAuthorization();
 
 app.MapControllers();

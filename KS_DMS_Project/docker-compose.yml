@@ -5,11 +5,11 @@ services:
       context: ./ASP_Rest_API
       dockerfile: Dockerfile
     ports:
-     - "8080:8080"
+     - "8081:8080"
      #- "443:443"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:8080 # Stellt sicher, dass nur HTTP verwendet wird
+      - ASPNETCORE_URLS=http://+:8081 # Stellt sicher, dass nur HTTP verwendet wird
 
   webui:
     image: web_ui_image
