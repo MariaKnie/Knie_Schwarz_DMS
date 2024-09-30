@@ -1,4 +1,4 @@
-﻿const apiUrl = 'http://localhost:8080/todo';
+﻿const apiUrl = 'http://localhost:8081/todo';
 
 // Function to fetch and display Todo items
 function fetchTodoItems() {
