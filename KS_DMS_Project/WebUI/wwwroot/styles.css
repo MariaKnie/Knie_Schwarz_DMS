@@ -22,7 +22,12 @@ button {
 }
 
     button.delete {
-        background-color: #dc3545;
+        background-color: #dc3545;   
+        display: block;
+        margin-top: 10px;
+        padding: 8px 16px;
+        cursor: pointer;
+
     }
 
     button:hover {
@@ -39,4 +44,61 @@ li {
     padding: 5px;
     background-color: #444;
     border-radius: 5px;
+}
+
+
+h1 {
+    text-align: center;
+}
+
+/* Flexbox container */
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+/* Styling for the form */
+.form-container {
+    width: 40%;
+}
+
+.form-container input {
+    display: block;
+    margin-bottom: 10px;
+    padding: 8px;
+    width: 100%;
+}
+
+.form-container button {
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+/* Styling for the list */
+.list-container {
+    width: 50%;
+}
+
+    .list-container button {
+        margin-bottom: 10px;
+        padding: 8px 16px;
+        cursor: pointer;
+    }
+
+#myDocList {
+    list-style-type: none;
+    padding: 0;
+}
+
+    #myDocList li {
+        background-color: #444;
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+.block {
+    display: block;
 }

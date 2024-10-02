@@ -1,57 +1,64 @@
-﻿const apiUrl = 'http://localhost:8081/todo';
+﻿const apiUrl = 'http://localhost:8081/MyDoc';
 
-// Function to fetch and display Todo items
-function fetchTodoItems() {
-    console.log('Fetching Todo items...');
+// Function to fetch and display MyDoc items
+function fetchMyDocItems() {
+    console.log('Fetching MyDoc items...');
     fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
-            const todoList = document.getElementById('todoList');
-            todoList.innerHTML = ''; // Clear the list before appending new items
-            data.forEach(task => {
+            const DocList = document.getElementById('myDocList');
+            DocList.innerHTML = ''; // Clear the list before appending new items
+            data.forEach(myDoc => {
                 // Create list item with delete and toggle complete buttons
-                const li = document.createElement('li');
+                const li = document.createElement('li'); //| Completed: ${task.isComplete} <button style="margin-left: 10px;" onclick="toggleComplete(${myDoc.id}, ${myDoc.isComplete}, '${myDoc.title}')">  Mark as ${ myDoc.isComplete ? 'Incomplete' : 'Complete' }
                 li.innerHTML = `
-                    <span>Task: ${task.name} | Completed: ${task.isComplete}</span>
-                    <button class="delete" style="margin-left: 10px;" onclick="deleteTask(${task.id})">Delete</button>
-                    <button style="margin-left: 10px;" onclick="toggleComplete(${task.id}, ${task.isComplete}, '${task.name}')">
-                        Mark as ${task.isComplete ? 'Incomplete' : 'Complete'}
-                    </button>
+                    <span class="block"> <strong>Title:</strong> ${myDoc.title} </span>
+                    <span class="block"> <strong>Author:</strong> ${myDoc.author} </span>
+                    <span class="block"> <strong>TextField:</strong> ${myDoc.textField}</span>
+                    <br>
+                    <button class="delete" style="margin-left: 10px;" onclick="deleteTask(${myDoc.id})">Delete</button>
                 `;
-                todoList.appendChild(li);
+                DocList.appendChild(li);
             });
         })
-        .catch(error => console.error('Fehler beim Abrufen der Todo-Items:', error));
+        .catch(error => console.error('Fehler beim Abrufen der MyDoc-Items:', error));
 }
 
 
 // Function to add a new task
-function addTask() {
-    const taskName = document.getElementById('taskName').value;
-    const isComplete = document.getElementById('isComplete').checked;
+function addDoc() {
+    const docTitle = document.getElementById('DocTitle').value;
+    const docAuthor = document.getElementById('DocAuthor').value;
+    const docTextfield = document.getElementById('DocTextField').value;
 
-    if (taskName.trim() === '') {
-        alert('Please enter a task name');
+    //const isComplete = document.getElementById('isComplete').checked;
+
+    if (docTitle.trim() === '') {
+        alert('Please enter a doc title');
         return;
     }
 
-    const newTask = {
-        name: taskName,
-        isComplete: isComplete
+    const newMyDoc = {
+        title: docTitle,
+        author: docAuthor,
+        Textfield: docTextfield
     };
+        //isComplete: isComplete
 
     fetch(apiUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(newTask)
+        body: JSON.stringify(newMyDoc)
     })
         .then(response => {
             if (response.ok) {
-                fetchTodoItems(); // Refresh the list after adding
-                document.getElementById('taskName').value = ''; // Clear the input field
-                document.getElementById('isComplete').checked = false; // Reset checkbox
+                fetchMyDocItems(); // Refresh the list after adding
+                document.getElementById('DocTitle').value = ''; // Clear the input field
+                document.getElementById('DocAuthor').value = ''; // Clear the input field
+                document.getElementById('DocTextField').value = ''; // Clear the input field
+                //document.getElementById('isComplete').checked = false; // Reset checkbox
             } else {
                 // Neues Handling für den Fall eines Fehlers (z.B. leeres Namensfeld)
                 response.json().then(err => alert("Fehler: " + err.message));
@@ -69,7 +76,7 @@ function deleteTask(id) {
     })
         .then(response => {
             if (response.ok) {
-                fetchTodoItems(); // Refresh the list after deletion
+                fetchMyDocItems(); // Refresh the list after deletion
             } else {
                 console.error('Fehler beim Löschen der Aufgabe.');
             }
@@ -96,7 +103,7 @@ function toggleComplete(id, isComplete, name) {
     })
         .then(response => {
             if (response.ok) {
-                fetchTodoItems(); // Liste nach dem Update aktualisieren
+                fetchMyDocItems(); // Liste nach dem Update aktualisieren
                 console.log('Erfolgreich aktualisiert.');
             } else {
                 console.error('Fehler beim Aktualisieren der Aufgabe.');
@@ -106,5 +113,5 @@ function toggleComplete(id, isComplete, name) {
 }
 
 
-// Load todo items on page load
-document.addEventListener('DOMContentLoaded', fetchTodoItems);
+// Load MyDoc items on page load
+document.addEventListener('DOMContentLoaded', fetchMyDocItems);

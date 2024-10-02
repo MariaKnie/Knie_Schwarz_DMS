@@ -43,7 +43,7 @@ namespace ASP_Api_Demo.Controllers
         }
 
         [HttpPost]
-        public ActionResult<MyDoc> PostTodoItem(MyDoc item)
+        public ActionResult<MyDoc> PostMyDocItem(MyDoc item)
         {
             // Überprüfung, ob der Title-Name leer oder null ist
             if (string.IsNullOrWhiteSpace(item.Title))
@@ -68,7 +68,7 @@ namespace ASP_Api_Demo.Controllers
 
 
         [HttpPut("{id}")]
-        public IActionResult PutTodoItem(int id, MyDoc item)
+        public IActionResult PutMyDocItem(int id, MyDoc item)
         {
             var existingItem = documents.FirstOrDefault(t => t.Id == id);
             if (existingItem == null)
@@ -78,11 +78,13 @@ namespace ASP_Api_Demo.Controllers
 
             existingItem.Title = item.Title;
             existingItem.Author = item.Author;
+            existingItem.EditedDate = DateTime.Now;
+            existingItem.TextField = item.TextField;
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteTodoItem(int id)
+        public IActionResult DeleteMyDocItem(int id)
         {
             var item = documents.FirstOrDefault(t => t.Id == id);
             if (item == null)
