@@ -5,7 +5,9 @@ using System.Reflection.Metadata;
 namespace ASP_Api_Demo.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("")]
+    // [Route("[controller]")] -> /MyDoc
+
     public class MyDocController : ControllerBase
     {
 
