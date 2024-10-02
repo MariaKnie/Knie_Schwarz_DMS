@@ -2,7 +2,7 @@
   "profiles": {
     "Docker Compose": {
       "commandName": "DockerCompose",
-      "commandVersion": "1.0",
+      "commandVersion": "1.1",
       "serviceActions": {
         "asp_api_demo": "StartDebugging"
       }
