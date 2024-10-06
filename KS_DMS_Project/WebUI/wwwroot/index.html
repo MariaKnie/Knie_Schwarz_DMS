@@ -11,18 +11,24 @@
 
     <!-- Container for form and list -->
     <div class="container">
-        <!-- Form to add a new task -->
+        <!-- Form to add or update a doc -->
         <div class="form-container">
-            <h3>Add New Doc</h3>
+            <h3>Add or Update Doc</h3>
             <input type="text" id="DocTitle" placeholder="Title">
             <input type="text" id="DocAuthor" placeholder="Author">
             <input type="text" id="DocTextField" placeholder="TextField">
-            <!--<label for="isComplete">Completed: </label>
-            <input type="checkbox" id="isComplete">-->
-            <button onclick="addDoc()">Add Doc</button>
+
+            <!-- Checkbox to toggle between Add and Update -->
+            <label for="isUpdate">Update existing doc?</label>
+            <input type="checkbox" id="isUpdate" onclick="toggleUpdateMode()">
+
+            <!-- ID input (hidden by default) -->
+            <input type="text" id="DocID" placeholder="Doc ID" style="display:none;">
+
+            <button id="docButton" onclick="submitDoc()">Add Doc</button>
         </div>
 
-        <!-- Task list -->
+        <!-- Doc list -->
         <div class="list-container">
             <button onclick="fetchMyDocItems()">Get List</button>
             <ul id="myDocList"></ul>
@@ -30,5 +36,6 @@
     </div>
 
     <script src="/app.js"></script>
+
 </body>
 </html>

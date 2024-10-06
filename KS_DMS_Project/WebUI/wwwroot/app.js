@@ -68,6 +68,57 @@ function addDoc() {
         .catch(error => console.error('Fehler:', error));
 }
 
+function updateDoc() {
+    const docId = document.getElementById('DocID').value;
+    const docTitle = document.getElementById('DocTitle').value;
+    const docAuthor = document.getElementById('DocAuthor').value;
+    const docTextfield = document.getElementById('DocTextField').value;
+
+    //const isComplete = document.getElementById('isComplete').checked;
+
+    if (docTitle.trim() === '') {
+        alert('Please enter an id');
+        return;
+    }
+
+    if (docTitle.trim() === '') {
+        alert('Please enter a doc title');
+        return;
+    }
+
+    const newMyDoc = {
+        id: docId,
+        title: docTitle,
+        author: docAuthor,
+        Textfield: docTextfield
+    };
+    //isComplete: isComplete
+    var apiUrl_put = apiUrl;
+    apiUrl_put += '/' + docId;
+    fetch(apiUrl_put, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newMyDoc)
+    })
+        .then(response => {
+            if (response.ok) {
+                fetchMyDocItems(); // Refresh the list after adding
+                document.getElementById('DocID').value = ''; // Clear the input field
+                document.getElementById('DocTitle').value = ''; // Clear the input field
+                document.getElementById('DocAuthor').value = ''; // Clear the input field
+                document.getElementById('DocTextField').value = ''; // Clear the input field
+                //document.getElementById('isComplete').checked = false; // Reset checkbox
+            } else {
+                // Neues Handling für den Fall eines Fehlers (z.B. leeres Namensfeld)
+                response.json().then(err => alert("Fehler: " + err.message));
+                console.error('Fehler beim Updaten des Docs.');
+            }
+        })
+        .catch(error => console.error('Fehler:', error));
+}
+
 
 // Function to delete a task
 function deleteTask(id) {
@@ -115,3 +166,41 @@ function toggleComplete(id, isComplete, name) {
 
 // Load MyDoc items on page load
 document.addEventListener('DOMContentLoaded', fetchMyDocItems);
+
+
+
+// Toggle between Add and Update mode
+function toggleUpdateMode() {
+    const isUpdateChecked = document.getElementById('isUpdate').checked;
+    const docButton = document.getElementById('docButton');
+    const docIDField = document.getElementById('DocID');
+
+    if (isUpdateChecked) {
+        docButton.textContent = 'Update Doc';
+        docIDField.style.display = 'block'; // Show the ID field when updating
+    } else {
+        docButton.textContent = 'Add Doc';
+        docIDField.style.display = 'none'; // Hide the ID field when adding
+    }
+}
+
+// Function to handle add or update based on checkbox
+function submitDoc() {
+    const isUpdateChecked = document.getElementById('isUpdate').checked;
+
+    if (isUpdateChecked) {
+        // Update doc logic
+        const docID = document.getElementById('DocID').value;
+        if (docID) {
+            console.log('Updating doc with ID:', docID);
+            updateDoc();
+        } else {
+            alert('Please enter a Doc ID to update');
+        }
+    } else {
+        // Add doc logic
+        console.log('Adding new doc');
+        addDoc();
+    }
+}
+
