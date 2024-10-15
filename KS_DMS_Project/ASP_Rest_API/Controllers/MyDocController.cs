@@ -39,7 +39,7 @@ namespace ASP_Api_Demo.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var client = _httpClientFactory.CreateClient("TodoDAL");
+            var client = _httpClientFactory.CreateClient("MyDocDAL");
             var response = await client.GetAsync("/api/todo"); // Endpunkt des DAL
 
             if (response.IsSuccessStatusCode)
@@ -55,7 +55,7 @@ namespace ASP_Api_Demo.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var client = _httpClientFactory.CreateClient("TodoDAL");
+            var client = _httpClientFactory.CreateClient("MyDocDAL");
             var response = await client.GetAsync($"/api/todo/{id}");
 
             if (response.IsSuccessStatusCode)
@@ -80,7 +80,7 @@ namespace ASP_Api_Demo.Controllers
                 return BadRequest(ModelState);
             }
 
-            var client = _httpClientFactory.CreateClient("TodoDAL");
+            var client = _httpClientFactory.CreateClient("MyDocDAL");
             var item = _mapper.Map<MyDoc>(itemDto);
             var response = await client.PostAsJsonAsync("/api/todo", item);
 
@@ -105,7 +105,7 @@ namespace ASP_Api_Demo.Controllers
                 return BadRequest("ID mismatch");
             }
 
-            var client = _httpClientFactory.CreateClient("TodoDAL");
+            var client = _httpClientFactory.CreateClient("MyDocDAL");
             var item = _mapper.Map<MyDoc>(itemDto);
             var response = await client.PutAsJsonAsync($"/api/todo/{id}", item);
 
@@ -120,7 +120,7 @@ namespace ASP_Api_Demo.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var client = _httpClientFactory.CreateClient("TodoDAL");
+            var client = _httpClientFactory.CreateClient("MyDocDAL");
             var response = await client.DeleteAsync($"/api/todo/{id}");
 
             if (response.IsSuccessStatusCode)

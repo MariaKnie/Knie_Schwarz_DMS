@@ -16,11 +16,18 @@ namespace MyDocDAL.Data
 
                 entity.HasKey(e => e.Id);  // Setzt den Primärschlüssel
 
-                entity.Property(e => e.Name)
+                entity.Property(e => e.Author)
                     .IsRequired()
-                    .HasMaxLength(100);  // Konfiguriert den "Name"-Spalten
+                    .HasMaxLength(100);  // Konfiguriert den "Author"-Spalten
 
-                entity.Property(e => e.IsComplete);  // Konfiguriert die "IsComplete"-Spalte
+                entity.Property(e => e.Titel)
+                   .IsRequired()
+                   .HasMaxLength(100);  // Konfiguriert den "Titel"-Spalten
+
+                entity.Property(e => e.Textfield)
+                 .IsRequired()
+                 .HasMaxLength(100);  // Konfiguriert den "Textfield"-Spalten
+                                      // entity.Property(e => e.IsComplete);  // Konfiguriert die "IsComplete"-Spalte
             });
 
             base.OnModelCreating(modelBuilder);

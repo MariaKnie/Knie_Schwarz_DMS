@@ -19,9 +19,13 @@ namespace MyDocDAL.Controllers
         [HttpPost]
         public async Task<IActionResult> PostAsync(MyDoc item)
         {
-            if (string.IsNullOrWhiteSpace(item.Name))
+            if (string.IsNullOrWhiteSpace(item.Author))
             {
-                return BadRequest(new { message = "Task name cannot be empty." });
+                return BadRequest(new { message = "Task Author cannot be empty." });
+            }
+            if (string.IsNullOrWhiteSpace(item.Titel))
+            {
+                return BadRequest(new { message = "Task Titel cannot be empty." });
             }
             await repository.AddAsync(item);
             return Ok();
@@ -36,8 +40,9 @@ namespace MyDocDAL.Controllers
                 return NotFound();
             }
 
-            existingItem.Name = item.Name;
-            existingItem.IsComplete = item.IsComplete;
+            existingItem.Author = item.Author;
+            existingItem.Titel = item.Titel;
+            existingItem.Textfield = item.Textfield;
             await repository.UpdateAsync(existingItem);
             return NoContent();
         }
