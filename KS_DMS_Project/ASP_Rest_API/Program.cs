@@ -1,7 +1,15 @@
+using FluentValidation.AspNetCore;
+using FluentValidation;
+using ASP_Rest_API.Validators;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+
+//Add AutoValidator
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<MyDocDtoValidator>();
 
 // CORS konfigurieren, um Anfragen von localhost:80 (WebUI) zuzulassen
 builder.Services.AddCors(options =>

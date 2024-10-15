@@ -31,6 +31,8 @@ function addDoc() {
     const docAuthor = document.getElementById('DocAuthor').value;
     const docTextfield = document.getElementById('DocTextField').value;
 
+    const errorDiv = document.getElementById('ErrorMessages');//Div für Fehlermeldung
+
     //const isComplete = document.getElementById('isComplete').checked;
 
     if (docTitle.trim() === '') {
@@ -61,7 +63,11 @@ function addDoc() {
                 //document.getElementById('isComplete').checked = false; // Reset checkbox
             } else {
                 // Neues Handling für den Fall eines Fehlers (z.B. leeres Namensfeld)
-                response.json().then(err => alert("Fehler: " + err.message));
+                response.json().then(err => {
+                    errorDiv.innerHTML = '<ul>' + Object.values(err.errors)
+                        .map(e => `<li>${e}</li>`).jion('') + '</ul>'
+                });
+
                 console.error('Fehler beim Hinzufügen der Aufgabe.');
             }
         })

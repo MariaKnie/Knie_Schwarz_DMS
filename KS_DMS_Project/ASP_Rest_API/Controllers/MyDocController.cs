@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata;
 using AutoMapper;
+using ASP_Rest_API.DTO;
 
 namespace ASP_Api_Demo.Controllers
 {
@@ -43,8 +44,8 @@ namespace ASP_Api_Demo.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                var items = await response.Content.ReadFromJsonAsync<IEnumerable<TodoItem>>();
-                var dtoItems = _mapper.Map<IEnumerable<TodoItemDto>>(items);
+                var items = await response.Content.ReadFromJsonAsync<IEnumerable<MyDoc>>();
+                var dtoItems = _mapper.Map<IEnumerable<MyDocDTO>>(items);
                 return Ok(dtoItems);
             }
 
@@ -59,8 +60,8 @@ namespace ASP_Api_Demo.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                var item = await response.Content.ReadFromJsonAsync<TodoItem>();
-                var dtoItem = _mapper.Map<TodoItemDto>(item);
+                var item = await response.Content.ReadFromJsonAsync<MyDoc>();
+                var dtoItem = _mapper.Map<MyDocDTO>(item);
                 if (item != null)
                 {
                     return Ok(dtoItem);
@@ -72,10 +73,15 @@ namespace ASP_Api_Demo.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(TodoItemDto itemDto)
+        public async Task<IActionResult> Create(MyDocDTO itemDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var client = _httpClientFactory.CreateClient("TodoDAL");
-            var item = _mapper.Map<TodoItem>(itemDto);
+            var item = _mapper.Map<MyDoc>(itemDto);
             var response = await client.PostAsJsonAsync("/api/todo", item);
 
             if (response.IsSuccessStatusCode)
@@ -87,15 +93,20 @@ namespace ASP_Api_Demo.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, TodoItemDto itemDto)
+        public async Task<IActionResult> Update(int id, MyDocDTO itemDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+
+            }
             if (id != itemDto.Id)
             {
                 return BadRequest("ID mismatch");
             }
 
             var client = _httpClientFactory.CreateClient("TodoDAL");
-            var item = _mapper.Map<TodoItem>(itemDto);
+            var item = _mapper.Map<MyDoc>(itemDto);
             var response = await client.PutAsJsonAsync($"/api/todo/{id}", item);
 
             if (response.IsSuccessStatusCode)
