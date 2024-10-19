@@ -7,7 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP_Rest_API", "ASP_Rest_AP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebUI", "WebUI\WebUI.csproj", "{7A214B19-B956-42C4-AD1C-D8CB5D8394DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyDocDAL", "MyDocDAL\MyDocDAL.csproj", "{C5302868-5601-4F2C-B6B5-9F1083849FD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyDocDAL", "MyDocDAL\MyDocDAL.csproj", "{C5302868-5601-4F2C-B6B5-9F1083849FD5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projektmappenelemente", "Projektmappenelemente", "{06410FB0-994C-4C9A-A7C5-4FD578A181AF}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+		launchSettings.json = launchSettings.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
