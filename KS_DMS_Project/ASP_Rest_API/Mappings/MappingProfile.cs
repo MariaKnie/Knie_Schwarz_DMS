@@ -18,7 +18,7 @@ namespace ASP_Rest_API.Mappings
                 .ForMember(dest => dest.TextField, opt
                     => opt.MapFrom(src => src.Textfield))
                 .ReverseMap()
-                   .ForMember(dest => dest.Id, opt
+                .ForMember(dest => dest.Id, opt
                     => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Author, opt
                     => opt.MapFrom(src => $"*{src.Author ?? string.Empty}*"))

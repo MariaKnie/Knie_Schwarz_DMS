@@ -1,4 +1,4 @@
-﻿const apiUrl = 'http://localhost:8081'; // before /MyDoc
+﻿const apiUrl = 'http://localhost:8081/mydoc'; // before /MyDoc
 
 // Function to fetch and display MyDoc items
 function fetchMyDocItems() {
