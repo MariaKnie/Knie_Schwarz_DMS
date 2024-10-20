@@ -36,7 +36,6 @@ namespace ASP_Api_Demo.Controllers
         /// <param name="title">Der Title des MyDocs, (string, optional)</param>
         /// <returns>IEnumearble<MyDoc></MyDoc></returns>
         [HttpGet]
-        [HttpGet]
         public async Task<IActionResult> Get()
         {
             var client = _httpClientFactory.CreateClient("MyDocDAL");
@@ -61,16 +60,19 @@ namespace ASP_Api_Demo.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var item = await response.Content.ReadFromJsonAsync<MyDoc>();
-                var dtoItem = _mapper.Map<MyDocDTO>(item);
-                if (item != null)
+                if (item == null)
                 {
-                    return Ok(dtoItem);
+                    return NotFound();
                 }
-                return NotFound();
+                var dtoItem = _mapper.Map<MyDocDTO>(item);
+                return Ok(dtoItem);
             }
 
+            // Log the response status code for debugging
+            Console.WriteLine($"Received response with status code: {response.StatusCode}");
             return StatusCode((int)response.StatusCode, "Error retrieving MyDoc item from DAL");
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Create(MyDocDTO itemDto)
@@ -86,7 +88,7 @@ namespace ASP_Api_Demo.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                return CreatedAtAction(nameof(GetById), new { id = item.Id }, itemDto);
+                return CreatedAtAction(nameof(GetById), new { id = item.id }, itemDto);
             }
 
             return StatusCode((int)response.StatusCode, "Error creating MyDoc item in DAL");
@@ -100,10 +102,12 @@ namespace ASP_Api_Demo.Controllers
                 return BadRequest(ModelState);
 
             }
-            if (id != itemDto.Id)
+            if (id != itemDto.id)
             {
                 return BadRequest("ID mismatch");
             }
+
+            itemDto.editeddate = DateTime.Now.ToUniversalTime();
 
             var client = _httpClientFactory.CreateClient("MyDocDAL");
             var item = _mapper.Map<MyDoc>(itemDto);

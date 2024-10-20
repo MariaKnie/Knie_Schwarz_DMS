@@ -19,17 +19,35 @@ namespace MyDocDAL.Controllers
         [HttpPost]
         public async Task<IActionResult> PostAsync(MyDoc item)
         {
-            if (string.IsNullOrWhiteSpace(item.Author))
+            if (string.IsNullOrWhiteSpace(item.author))
             {
                 return BadRequest(new { message = "Task Author cannot be empty." });
             }
-            if (string.IsNullOrWhiteSpace(item.Titel))
+            if (string.IsNullOrWhiteSpace(item.title))
             {
                 return BadRequest(new { message = "Task Titel cannot be empty." });
             }
+
+            item.author = item.author;
+            item.createddate = DateTime.Now.ToUniversalTime();
+            item.editeddate = DateTime.Now.ToUniversalTime();
+
             await repository.AddAsync(item);
             return Ok();
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAsync(int id)
+        {
+            var existingItem = await repository.GetByIdAsync(id);
+            if (existingItem == null)
+            {
+                return NotFound(); // Return 404 if the item is not found
+            }
+
+            return Ok(existingItem); // Return 200 OK with the item
+        }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAsync(int id, MyDoc item)
@@ -40,9 +58,11 @@ namespace MyDocDAL.Controllers
                 return NotFound();
             }
 
-            existingItem.Author = item.Author;
-            existingItem.Titel = item.Titel;
-            existingItem.Textfield = item.Textfield;
+            existingItem.title = item.title;
+            existingItem.author = item.author;
+            existingItem.textfield = item.textfield;
+            existingItem.createddate = existingItem.createddate.Value.ToUniversalTime();
+            existingItem.editeddate = DateTime.Now.ToUniversalTime();
             await repository.UpdateAsync(existingItem);
             return NoContent();
         }

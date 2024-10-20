@@ -47,10 +47,10 @@ services:
       context: .
       dockerfile: ./MyDocDAL/Dockerfile
     ports:
-      - "8080:8080"
+      - "8082:8082"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:8080
+      - ASPNETCORE_URLS=http://+:8082
     depends_on:
        db:
         condition: service_healthy  # Wait for the db service to be healthy

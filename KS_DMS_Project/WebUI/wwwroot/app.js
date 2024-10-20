@@ -12,6 +12,9 @@ function fetchMyDocItems() {
                 // Create list item with delete and toggle complete buttons
                 const li = document.createElement('li'); //| Completed: ${task.isComplete} <button style="margin-left: 10px;" onclick="toggleComplete(${myDoc.id}, ${myDoc.isComplete}, '${myDoc.title}')">  Mark as ${ myDoc.isComplete ? 'Incomplete' : 'Complete' }
                 li.innerHTML = `
+                    <span class="block"> <strong>ID:</strong> ${myDoc.id} </span>
+                    <span class="block"> <strong>CreateDate:</strong> ${myDoc.createddate} </span>
+                    <span class="block"> <strong>EditDate:</strong> ${myDoc.editeddate} </span>
                     <span class="block"> <strong>Title:</strong> ${myDoc.title} </span>
                     <span class="block"> <strong>Author:</strong> ${myDoc.author} </span>
                     <span class="block"> <strong>TextField:</strong> ${myDoc.textField}</span>

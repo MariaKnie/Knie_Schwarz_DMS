@@ -9,23 +9,23 @@ namespace ASP_Rest_API.Mappings
         public MappingProfile()
         {
             CreateMap<MyDoc, MyDocDTO>()
-                .ForMember(dest => dest.Id, opt
-                    => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.Author, opt
-                    => opt.MapFrom(src => $"*{src.Author ?? string.Empty}*"))
-                .ForMember(dest => dest.Title, opt
-                    => opt.MapFrom(src => src.Titel))
-                .ForMember(dest => dest.TextField, opt
-                    => opt.MapFrom(src => src.Textfield))
+                .ForMember(dest => dest.id, opt
+                    => opt.MapFrom(src => src.id))
+                .ForMember(dest => dest.author, opt
+                    => opt.MapFrom(src => $"*{src.author ?? string.Empty}*"))
+                .ForMember(dest => dest.title, opt
+                    => opt.MapFrom(src => src.title))
+                .ForMember(dest => dest.textfield, opt
+                    => opt.MapFrom(src => src.textfield))
                 .ReverseMap()
-                .ForMember(dest => dest.Id, opt
-                    => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.Author, opt
-                    => opt.MapFrom(src => $"*{src.Author ?? string.Empty}*"))
-                .ForMember(dest => dest.Titel, opt
-                    => opt.MapFrom(src => src.Title))
-                .ForMember(dest => dest.Textfield, opt
-                    => opt.MapFrom(src => src.TextField));
+                .ForMember(dest => dest.id, opt
+                    => opt.MapFrom(src => src.id))
+                .ForMember(dest => dest.author, opt
+                    => opt.MapFrom(src => $"*{src.author ?? string.Empty}*"))
+                .ForMember(dest => dest.title, opt
+                    => opt.MapFrom(src => src.title))
+                .ForMember(dest => dest.textfield, opt
+                    => opt.MapFrom(src => src.textfield));
 
 
 
