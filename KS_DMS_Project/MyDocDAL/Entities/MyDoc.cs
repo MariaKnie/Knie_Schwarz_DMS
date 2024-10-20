@@ -4,6 +4,7 @@ namespace MyDocDAL.Entities
 {
     public class MyDoc
     {
+        [Key]
         public int id { get; set; } // This should be the primary key
         public DateTime ? createddate { get; set; }
         public DateTime ? editeddate { get; set; }

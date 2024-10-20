@@ -7,8 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+//builder.Services.AddDbContext<MyDocContext>();    //used for migrations
 builder.Services.AddDbContext<MyDocContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("MyDocDatabase")));
+
 
 builder.Services.AddScoped<ItMyDocRepository, MyDocRepository>();
 
@@ -24,6 +26,8 @@ using (var scope = app.Services.CreateScope())
     {
         Console.WriteLine("Versuche, eine Verbindung zur Datenbank herzustellen...");
 
+        //context.Database.EnsureDeleted(); //Use to drop table
+        context.Database.Migrate(); //Does function properly ^w^
         // Warte, bis die Datenbank bereit ist
         while (!context.Database.CanConnect())
         {

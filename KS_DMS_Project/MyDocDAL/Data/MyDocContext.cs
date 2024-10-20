@@ -3,31 +3,43 @@ using MyDocDAL.Entities;
 
 namespace MyDocDAL.Data
 {
-    public sealed class MyDocContext(DbContextOptions<MyDocContext> options) : DbContext(options)
+    public class MyDocContext : DbContext
     {
+        public MyDocContext(DbContextOptions<MyDocContext> options)
+            : base(options)
+        {
+        }
+
+        //public MyDocContext()
+        //{
+        //}
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseNpgsql("MyDocDatabase");
+        //}
+
         public DbSet<MyDoc>? MyDocItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Manuelle Konfiguration der Tabelle
             modelBuilder.Entity<MyDoc>(entity =>
             {
-                entity.ToTable("mydocitems");  // Setzt den Tabellennamen
+                entity.ToTable("mydocitems");
 
-                entity.HasKey(e => e.id);  // Setzt den Primärschlüssel
+                entity.HasKey(e => e.id); // Make sure the property name matches
 
                 entity.Property(e => e.author)
                     .IsRequired()
-                    .HasMaxLength(100);  // Konfiguriert den "Author"-Spalten
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.title)
-                   .IsRequired()
-                   .HasMaxLength(100);  // Konfiguriert den "Titel"-Spalten
+                    .IsRequired()
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.textfield)
-                 .IsRequired()
-                 .HasMaxLength(100);  // Konfiguriert den "Textfield"-Spalten
-                                      // entity.Property(e => e.IsComplete);  // Konfiguriert die "IsComplete"-Spalte
+                    .IsRequired()
+                    .HasMaxLength(100);
             });
 
             base.OnModelCreating(modelBuilder);
