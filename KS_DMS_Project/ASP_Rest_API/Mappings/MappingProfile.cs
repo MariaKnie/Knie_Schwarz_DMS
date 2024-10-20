@@ -12,20 +12,28 @@ namespace ASP_Rest_API.Mappings
                 .ForMember(dest => dest.id, opt
                     => opt.MapFrom(src => src.id))
                 .ForMember(dest => dest.author, opt
-                    => opt.MapFrom(src => $"*{src.author ?? string.Empty}*"))
+                    => opt.MapFrom(src => $"{src.author ?? string.Empty}"))
                 .ForMember(dest => dest.title, opt
                     => opt.MapFrom(src => src.title))
                 .ForMember(dest => dest.textfield, opt
                     => opt.MapFrom(src => src.textfield))
+                .ForMember(dest => dest.createddate, opt
+                    => opt.MapFrom(src => src.createddate))
+                .ForMember(dest => dest.editeddate, opt
+                    => opt.MapFrom(src => src.editeddate))
                 .ReverseMap()
                 .ForMember(dest => dest.id, opt
                     => opt.MapFrom(src => src.id))
                 .ForMember(dest => dest.author, opt
-                    => opt.MapFrom(src => $"*{src.author ?? string.Empty}*"))
+                    => opt.MapFrom(src => $"{src.author ?? string.Empty}"))
                 .ForMember(dest => dest.title, opt
                     => opt.MapFrom(src => src.title))
                 .ForMember(dest => dest.textfield, opt
-                    => opt.MapFrom(src => src.textfield));
+                    => opt.MapFrom(src => src.textfield))
+                .ForMember(dest => dest.createddate, opt
+                    => opt.MapFrom(src => src.createddate))
+                .ForMember(dest => dest.editeddate, opt
+                    => opt.MapFrom(src => src.editeddate));
 
 
 

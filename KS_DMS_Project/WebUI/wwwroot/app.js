@@ -17,7 +17,7 @@ function fetchMyDocItems() {
                     <span class="block"> <strong>EditDate:</strong> ${myDoc.editeddate} </span>
                     <span class="block"> <strong>Title:</strong> ${myDoc.title} </span>
                     <span class="block"> <strong>Author:</strong> ${myDoc.author} </span>
-                    <span class="block"> <strong>TextField:</strong> ${myDoc.textField}</span>
+                    <span class="block"> <strong>TextField:</strong> ${myDoc.textfield}</span>
                     <br>
                     <button class="delete" style="margin-left: 10px;" onclick="deleteTask(${myDoc.id})">Delete</button>
                 `;
@@ -34,7 +34,7 @@ function addDoc() {
     const docAuthor = document.getElementById('DocAuthor').value;
     const docTextfield = document.getElementById('DocTextField').value;
 
-    const errorDiv = document.getElementById('ErrorMessages');//Div für Fehlermeldung
+    const errorDiv = document.getElementById('errorMessage');//Div für Fehlermeldung
 
     //const isComplete = document.getElementById('isComplete').checked;
 
@@ -67,8 +67,9 @@ function addDoc() {
             } else {
                 // Neues Handling für den Fall eines Fehlers (z.B. leeres Namensfeld)
                 response.json().then(err => {
-                    errorDiv.innerHTML = '<ul>' + Object.values(err.errors)
-                        .map(e => `<li>${e}</li>`).jion('') + '</ul>'
+                    errorDiv.innerHTML = `<ul>` +
+                        Object.values(err.errors).map(e => `<li>${e}</li>`).join('')
+                        + `</ul>`;
                 });
 
                 console.error('Fehler beim Hinzufügen der Aufgabe.');
@@ -83,12 +84,9 @@ function updateDoc() {
     const docAuthor = document.getElementById('DocAuthor').value;
     const docTextfield = document.getElementById('DocTextField').value;
 
-    //const isComplete = document.getElementById('isComplete').checked;
+    const errorDiv = document.getElementById('errorMessage');//Div für Fehlermeldung
 
-    if (docTitle.trim() === '') {
-        alert('Please enter an id');
-        return;
-    }
+    //const isComplete = document.getElementById('isComplete').checked;
 
     if (docTitle.trim() === '') {
         alert('Please enter a doc title');
@@ -121,8 +119,13 @@ function updateDoc() {
                 //document.getElementById('isComplete').checked = false; // Reset checkbox
             } else {
                 // Neues Handling für den Fall eines Fehlers (z.B. leeres Namensfeld)
-                response.json().then(err => alert("Fehler: " + err.message));
-                console.error('Fehler beim Updaten des Docs.');
+                response.json().then(err => {
+                    errorDiv.innerHTML = `<ul>` +
+                        Object.values(err.errors).map(e => `<li>${e}</li>`).join('')
+                        + `</ul>`;
+                });
+
+                console.error('Fehler beim Update der Aufgabe.');
             }
         })
         .catch(error => console.error('Fehler:', error));
