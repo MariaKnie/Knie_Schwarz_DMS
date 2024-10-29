@@ -18,13 +18,46 @@ function fetchMyDocItems() {
                     <span class="block"> <strong>Title:</strong> ${myDoc.title} </span>
                     <span class="block"> <strong>Author:</strong> ${myDoc.author} </span>
                     <span class="block"> <strong>TextField:</strong> ${myDoc.textfield}</span>
-                    <br>
+                    <br/>
+                    <span>File: ${myDoc.title || "No file uploaded"}</span>
+                    <input type="file" id="fileInput${myDoc.id}" />
+                    <button style="margin-left: 10px;" onclick="uploadFile(${myDoc.id}, document.getElementById('fileInput${myDoc.id}'))">
+                        Upload File
+                    </button>
+                    <br/>
                     <button class="delete" style="margin-left: 10px;" onclick="deleteTask(${myDoc.id})">Delete</button>
                 `;
                 DocList.appendChild(li);
             });
         })
         .catch(error => console.error('Fehler beim Abrufen der MyDoc-Items:', error));
+}
+
+function uploadFile(Id, fileInput) {
+    const file = fileInput.files[0];
+    if (!file) {
+        alert("Keine Datei ausgewählt.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('docFile', file);
+
+    fetch(`${apiUrl}/${Id}/upload`, {
+        method: 'PUT',
+        body: formData
+    })
+        .then(response => {
+            if (response.ok) {
+                fetchTodoItems();
+                alert("Datei erfolgreich hochgeladen.");
+            } else {
+                alert("Fehler beim Hochladen der Datei.");
+            }
+        })
+        .catch(error => {
+            console.error('Fehler:', error);
+        });
 }
 
 

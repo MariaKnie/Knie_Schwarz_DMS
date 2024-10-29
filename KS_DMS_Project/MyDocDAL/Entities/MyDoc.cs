@@ -11,5 +11,6 @@ namespace MyDocDAL.Entities
         public string ? author { get; set; }
         public string ? title { get; set; }
         public string ? textfield { get; set; }
+        public string? FileName { get; set; }
     }
 }

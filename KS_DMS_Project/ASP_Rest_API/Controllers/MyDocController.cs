@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata;
 using AutoMapper;
 using ASP_Rest_API.DTO;
+using RabbitMQ.Client;
+using System.Text;
 
 namespace ASP_Api_Demo.Controllers
 {
@@ -10,16 +12,27 @@ namespace ASP_Api_Demo.Controllers
     [Route("mydoc")]
     // [Route("[controller]")] -> /MyDoc
 
-    public class MyDocController : ControllerBase
+    public class MyDocController : ControllerBase, IDisposable
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IMapper _mapper;
+        private readonly IConnection _connection;
+        private readonly IModel _channel;
 
 
         public MyDocController(IHttpClientFactory httpClientFactory, IMapper mapper)
         {
             _httpClientFactory = httpClientFactory;
             _mapper = mapper;
+
+            // Stelle die Verbindung zu RabbitMQ her
+            var factory = new ConnectionFactory() { HostName = "rabbitmq", UserName = "user", Password = "password" };
+            _connection = factory.CreateConnection();
+            _channel = _connection.CreateModel();
+
+            // Deklariere die Queue
+            _channel.QueueDeclare(queue: "file_queue", durable: false, exclusive: false, autoDelete: false, arguments: null);
+
         }
 
         //private static List<MyDoc> documents = new List<MyDoc>
@@ -121,6 +134,55 @@ namespace ASP_Api_Demo.Controllers
             return StatusCode((int)response.StatusCode, "Error updating MyDoc item in DAL");
         }
 
+
+        [HttpPut("{id}/upload")]
+        public async Task<IActionResult> UploadFile(int id, IFormFile? docFile)
+        {
+            if (docFile == null || docFile.Length == 0)
+            {
+                return BadRequest("Keine Datei hochgeladen.");
+            }
+
+            // Hole den Task vom DAL
+            var client = _httpClientFactory.CreateClient("MyDocDAL");
+            var response = await client.GetAsync($"/api/mydoc/{id}");
+            if (!response.IsSuccessStatusCode)
+            {
+                return NotFound($"Fehler beim Abrufen des Docs mit ID {id}");
+            }
+
+            // Mappe das empfangene TodoItem auf ein TodoItemDto
+            var myDoc = await response.Content.ReadFromJsonAsync<MyDocDTO>();
+            if (myDoc == null)
+            {
+                return NotFound($"Task mit ID {id} nicht gefunden.");
+            }
+
+            var myDocDto = _mapper.Map<MyDoc>(myDoc);
+
+            // Setze den Dateinamen im DTO
+            myDocDto.FileName = docFile.FileName;
+
+            // Aktualisiere das Item im DAL, nutze das DTO
+            var updateResponse = await client.PutAsJsonAsync($"/api/mydoc/{id}", myDocDto);
+            if (!updateResponse.IsSuccessStatusCode)
+            {
+                return StatusCode((int)updateResponse.StatusCode, $"Fehler beim Speichern des Dateinamens für Doc {id}");
+            }
+
+            // Nachricht an RabbitMQ
+            try
+            {
+                SendToMessageQueue(docFile.FileName);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Fehler beim Senden der Nachricht an RabbitMQ: {ex.Message}");
+            }
+
+            return Ok(new { message = $"Dateiname {docFile.FileName} für Doc {id} erfolgreich gespeichert." });
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -135,80 +197,19 @@ namespace ASP_Api_Demo.Controllers
             return StatusCode((int)response.StatusCode, "Error deleting MyDoc item from DAL");
         }
 
-        //public IEnumerable<MyDoc> Get([FromQuery] string? author, [FromQuery] string? title)
-        //{
+        private void SendToMessageQueue(string fileName)
+        {
+            // Sende die Nachricht in den RabbitMQ channel/queue
+            var body = Encoding.UTF8.GetBytes(fileName);
+            _channel.BasicPublish(exchange: "", routingKey: "file_queue", basicProperties: null, body: body);
+            Console.WriteLine($@"[x] Sent {fileName}");
+        }
 
+        public void Dispose()
+        {
+            _channel?.Close();
+            _connection?.Close();
+        }
 
-
-        //    var items = documents.AsEnumerable();
-
-        //    //Nach Name filterm wenn ein Name übergeben wurde
-        //    if (!string.IsNullOrWhiteSpace(author))
-        //    {
-        //        items = items.Where(t => t.Author.Contains(author));
-        //    }
-
-        //    //Nach Name filterm wenn ein Name übergeben wurde
-        //    if (!string.IsNullOrWhiteSpace(title))
-        //    {
-        //        items = items.Where(t => t.Title.Contains(title));
-        //    }
-
-        //    return items;
-        //}
-
-        //[HttpPost]
-        //public ActionResult<MyDoc> PostMyDocItem(MyDoc item)
-        //{
-        //    // Überprüfung, ob der Title-Name leer oder null ist
-        //    if (string.IsNullOrWhiteSpace(item.Title))
-        //    {
-        //        return BadRequest(new { message = "Doc Title cannot be empty." });
-        //    }
-
-        //    // Neue ID generieren: Falls die Liste leer ist, starte mit ID 1
-        //    if (documents.Any())
-        //    {
-        //        item.Id = documents.Max(t => t.Id) + 1; // Generiere die nächste ID basierend auf dem Maximalwert
-        //    } else
-        //    {
-        //        item.Id = 1; // Falls die Liste leer ist, starte mit ID 1
-        //    }
-
-        //    documents.Add(item);
-
-        //    // Erfolgreich erstellt zurückgeben
-        //    return CreatedAtAction(nameof(Get), new { id = item.Id }, item);
-        //}
-
-
-        //[HttpPut("{id}")]
-        //public IActionResult PutMyDocItem(int id, MyDoc item)
-        //{
-        //    var existingItem = documents.FirstOrDefault(t => t.Id == id);
-        //    if (existingItem == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    existingItem.Title = item.Title;
-        //    existingItem.Author = item.Author;
-        //    existingItem.EditedDate = DateTime.Now;
-        //    existingItem.TextField = item.TextField;
-        //    return NoContent();
-        //}
-
-        //[HttpDelete("{id}")]
-        //public IActionResult DeleteMyDocItem(int id)
-        //{
-        //    var item = documents.FirstOrDefault(t => t.Id == id);
-        //    if (item == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    documents.Remove(item);
-        //    return NoContent();
-        //}
     }
 }

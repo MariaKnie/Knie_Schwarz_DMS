@@ -40,6 +40,9 @@ namespace MyDocDAL.Data
                 entity.Property(e => e.textfield)
                     .IsRequired()
                     .HasMaxLength(100);
+
+                entity.Property(e => e.FileName)
+                    .HasMaxLength(255);
             });
 
             base.OnModelCreating(modelBuilder);

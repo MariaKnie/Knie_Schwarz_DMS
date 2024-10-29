@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace MyDocDAL.Migrations.Identity
+namespace MyDocDAL.Migrations
 {
     /// <inheritdoc />
     public partial class Create_Database : Migration
@@ -22,7 +22,8 @@ namespace MyDocDAL.Migrations.Identity
                     editeddate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     author = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    textfield = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                    textfield = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    FileName = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true)
                 },
                 constraints: table =>
                 {
