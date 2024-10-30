@@ -2,8 +2,18 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using ASP_Rest_API.Validators;
 using ASP_Rest_API.Mappings;
+using log4net.Config;
+using log4net;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure log4net from the external config file
+XmlConfigurator.Configure(new System.IO.FileInfo("log4net.config"));
+
+// Optional: Configure built-in logging (if needed)
+builder.Logging.ClearProviders();
+builder.Logging.AddLog4Net(); // You may need to add a reference for this
+
 
 // Add services to the container.
 builder.Services.AddControllers();

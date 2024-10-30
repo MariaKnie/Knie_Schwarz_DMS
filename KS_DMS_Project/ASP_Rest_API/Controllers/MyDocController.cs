@@ -5,6 +5,7 @@ using AutoMapper;
 using ASP_Rest_API.DTO;
 using RabbitMQ.Client;
 using System.Text;
+using log4net;
 
 namespace ASP_Api_Demo.Controllers
 {
@@ -19,17 +20,21 @@ namespace ASP_Api_Demo.Controllers
         private readonly IConnection _connection;
         private readonly IModel _channel;
 
+        private static readonly ILog log = LogManager.GetLogger(typeof(MyDocController));
 
         public MyDocController(IHttpClientFactory httpClientFactory, IMapper mapper)
         {
             _httpClientFactory = httpClientFactory;
             _mapper = mapper;
+            log4net.Config.XmlConfigurator.Configure();
 
+            log.Info("Creating Factory, connection and channel");
             // Stelle die Verbindung zu RabbitMQ her
             var factory = new ConnectionFactory() { HostName = "rabbitmq", UserName = "user", Password = "password" };
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
 
+            log.Info("Creating Queue");
             // Deklariere die Queue
             _channel.QueueDeclare(queue: "file_queue", durable: false, exclusive: false, autoDelete: false, arguments: null);
 
@@ -61,6 +66,7 @@ namespace ASP_Api_Demo.Controllers
                 return Ok(dtoItems);
             }
 
+            log.Error("Error retrieving MyDoc items from DAL In Get");
             return StatusCode((int)response.StatusCode, "Error retrieving MyDoc items from DAL");
         }
 
@@ -83,6 +89,8 @@ namespace ASP_Api_Demo.Controllers
 
             // Log the response status code for debugging
             Console.WriteLine($"Received response with status code: {response.StatusCode}");
+
+            log.Error("Error retrieving MyDoc items from DAL In Get ID");
             return StatusCode((int)response.StatusCode, "Error retrieving MyDoc item from DAL");
         }
 
@@ -104,6 +112,7 @@ namespace ASP_Api_Demo.Controllers
                 return CreatedAtAction(nameof(GetById), new { id = item.id }, itemDto);
             }
 
+            log.Error("Error retrieving MyDoc items from DAL In Post");
             return StatusCode((int)response.StatusCode, "Error creating MyDoc item in DAL");
         }
 
@@ -131,6 +140,7 @@ namespace ASP_Api_Demo.Controllers
                 return NoContent();
             }
 
+            log.Error("Error retrieving MyDoc items from DAL In Put ID");
             return StatusCode((int)response.StatusCode, "Error updating MyDoc item in DAL");
         }
 
@@ -148,6 +158,7 @@ namespace ASP_Api_Demo.Controllers
             var response = await client.GetAsync($"/api/mydoc/{id}");
             if (!response.IsSuccessStatusCode)
             {
+                log.Error("Fehler beim Abrufen des Docs mit ID " + id);
                 return NotFound($"Fehler beim Abrufen des Docs mit ID {id}");
             }
 
@@ -155,6 +166,7 @@ namespace ASP_Api_Demo.Controllers
             var myDoc = await response.Content.ReadFromJsonAsync<MyDocDTO>();
             if (myDoc == null)
             {
+                log.Error("Task mit ID nicht gefunden: " + id);
                 return NotFound($"Task mit ID {id} nicht gefunden.");
             }
 
@@ -167,6 +179,7 @@ namespace ASP_Api_Demo.Controllers
             var updateResponse = await client.PutAsJsonAsync($"/api/mydoc/{id}", myDocDto);
             if (!updateResponse.IsSuccessStatusCode)
             {
+                log.Error("Fehler beim Speichern des Dateinamens für Doc " + id);
                 return StatusCode((int)updateResponse.StatusCode, $"Fehler beim Speichern des Dateinamens für Doc {id}");
             }
 
@@ -177,6 +190,7 @@ namespace ASP_Api_Demo.Controllers
             }
             catch (Exception ex)
             {
+                log.Error("Fehler beim Senden der Nachricht an RabbitMQ:" + ex.Message);
                 return StatusCode(500, $"Fehler beim Senden der Nachricht an RabbitMQ: {ex.Message}");
             }
 
@@ -194,6 +208,7 @@ namespace ASP_Api_Demo.Controllers
                 return NoContent();
             }
 
+            log.Error("Error deleting MyDoc item from DAL in Delete ID:" + id);
             return StatusCode((int)response.StatusCode, "Error deleting MyDoc item from DAL");
         }
 
@@ -208,6 +223,7 @@ namespace ASP_Api_Demo.Controllers
                 return NoContent();
             }
 
+            log.Error("Error deleting MyDoc item from DAL in Delete FILE ID:" + id);
             return StatusCode((int)response.StatusCode, "Error deleting MyDoc item File from DAL");
         }
 
