@@ -26,7 +26,6 @@ namespace ASP_Api_Demo.Controllers
         {
             _httpClientFactory = httpClientFactory;
             _mapper = mapper;
-            log4net.Config.XmlConfigurator.Configure();
 
             log.Info("Creating Factory, connection and channel");
             // Stelle die Verbindung zu RabbitMQ her

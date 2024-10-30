@@ -23,6 +23,12 @@ FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./ASP_Rest_API/ASP_Rest_API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
+
+# Copy and rename the log4net configuration file
+COPY ./ASP_Rest_API/log4net.config /app/log4net.config
+
+
+
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app

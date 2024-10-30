@@ -28,5 +28,9 @@ WORKDIR /app
 # Kopiere veröffentlichte Dateien aus dem vorherigen Staging
 COPY --from=publish /app/publish .
 
+# Copy and rename the log4net configuration file
+COPY ./MyDocDAL/log4netDAL.config /app/log4net.config
+
+
 # Start der Anwendung
 ENTRYPOINT ["dotnet", "MyDocDAL.dll"]

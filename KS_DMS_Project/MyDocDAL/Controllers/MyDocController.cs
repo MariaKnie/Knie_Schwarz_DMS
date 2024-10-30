@@ -3,6 +3,7 @@ using MyDocDAL.Repositories;
 using MyDocDAL.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using log4net;
 
 namespace MyDocDAL.Controllers
 {
@@ -10,9 +11,13 @@ namespace MyDocDAL.Controllers
     [Route("api/[controller]")]
     public class MyDocController(ItMyDocRepository repository) : ControllerBase
     {
+
+        private static readonly ILog log = LogManager.GetLogger(typeof(MyDocController));
+
         [HttpGet]
         public async Task<IEnumerable<MyDoc>> GetAsync()
         {
+            log.Info("Fetching all documents.");
             return await repository.GetAllAsync();
         }
 
@@ -21,10 +26,12 @@ namespace MyDocDAL.Controllers
         {
             if (string.IsNullOrWhiteSpace(item.author))
             {
+                log.Warn("Task Author cannot be empty.");
                 return BadRequest(new { message = "Task Author cannot be empty." });
             }
             if (string.IsNullOrWhiteSpace(item.title))
             {
+                log.Warn("Task Title cannot be empty.");
                 return BadRequest(new { message = "Task Titel cannot be empty." });
             }
 
@@ -33,15 +40,18 @@ namespace MyDocDAL.Controllers
             item.editeddate = DateTime.Now.ToUniversalTime();
 
             await repository.AddAsync(item);
+            log.Info("New document added successfully.");
             return Ok();
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync(int id)
         {
+            log.Info($"Fetching document with ID {id}.");
             var existingItem = await repository.GetByIdAsync(id);
             if (existingItem == null)
             {
+                log.Warn($"Document with ID {id} not found.");
                 return NotFound(); // Return 404 if the item is not found
             }
 
@@ -55,6 +65,7 @@ namespace MyDocDAL.Controllers
             var existingItem = await repository.GetByIdAsync(id);
             if (existingItem == null)
             {
+                log.Warn($"Document with ID {id} not found.");
                 return NotFound();
             }
 
@@ -77,6 +88,7 @@ namespace MyDocDAL.Controllers
             var item = await repository.GetByIdAsync(id);
             if (item == null)
             {
+                log.Warn($"Document with ID {id} not found.");
                 return NotFound();
             }
 
@@ -92,6 +104,7 @@ namespace MyDocDAL.Controllers
             var existingItem = await repository.GetByIdAsync(id);
             if (existingItem == null)
             {
+                log.Warn($"Document with ID {id} not found.");
                 return NotFound();
             }
 

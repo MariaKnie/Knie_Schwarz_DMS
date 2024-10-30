@@ -7,8 +7,9 @@ using log4net;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configure log4net from the external config file
-XmlConfigurator.Configure(new System.IO.FileInfo("log4net.config"));
+var logRepository = LogManager.GetRepository(System.Reflection.Assembly.GetEntryAssembly());
+log4net.Config.XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
+
 
 // Optional: Configure built-in logging (if needed)
 builder.Logging.ClearProviders();
