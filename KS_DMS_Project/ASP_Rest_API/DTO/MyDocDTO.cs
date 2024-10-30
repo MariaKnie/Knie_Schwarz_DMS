@@ -8,7 +8,7 @@
             public DateTime createddate { get; set; }
             public DateTime editeddate { get; set; }
             public string textfield { get; set; }
-            public string? FileName { get; set; }
+            public string? filename { get; set; }
 
 
     }

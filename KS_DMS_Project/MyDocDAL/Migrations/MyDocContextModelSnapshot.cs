@@ -30,7 +30,7 @@ namespace MyDocDAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
-                    b.Property<string>("FileName")
+                    b.Property<string>("filename")
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 

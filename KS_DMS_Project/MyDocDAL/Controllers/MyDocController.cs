@@ -63,6 +63,10 @@ namespace MyDocDAL.Controllers
             existingItem.textfield = item.textfield;
             existingItem.createddate = existingItem.createddate.Value.ToUniversalTime();
             existingItem.editeddate = DateTime.Now.ToUniversalTime();
+            if (item.filename != null)
+            {
+                existingItem.filename = item.filename;
+            }
             await repository.UpdateAsync(existingItem);
             return NoContent();
         }
@@ -77,6 +81,25 @@ namespace MyDocDAL.Controllers
             }
 
             await repository.DeleteAsync(id);
+            return NoContent();
+        }
+
+
+
+        [HttpDelete("{id}/File")]
+        public async Task<IActionResult> DelteFileAsync(int id)
+        {
+            var existingItem = await repository.GetByIdAsync(id);
+            if (existingItem == null)
+            {
+                return NotFound();
+            }
+
+            existingItem.createddate = existingItem.createddate.Value.ToUniversalTime();
+            existingItem.editeddate = DateTime.Now.ToUniversalTime();
+            existingItem.filename = "";
+            
+            await repository.UpdateAsync(existingItem);
             return NoContent();
         }
     }

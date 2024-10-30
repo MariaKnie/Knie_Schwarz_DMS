@@ -23,7 +23,7 @@ namespace MyDocDAL.Migrations
                     author = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     textfield = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    FileName = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true)
+                    filename = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true)
                 },
                 constraints: table =>
                 {

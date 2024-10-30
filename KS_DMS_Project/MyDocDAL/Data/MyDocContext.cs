@@ -41,7 +41,7 @@ namespace MyDocDAL.Data
                     .IsRequired()
                     .HasMaxLength(100);
 
-                entity.Property(e => e.FileName)
+                entity.Property(e => e.filename)
                     .HasMaxLength(255);
             });
 

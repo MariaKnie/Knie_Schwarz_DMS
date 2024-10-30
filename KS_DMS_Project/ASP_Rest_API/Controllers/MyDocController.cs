@@ -161,7 +161,7 @@ namespace ASP_Api_Demo.Controllers
             var myDocDto = _mapper.Map<MyDoc>(myDoc);
 
             // Setze den Dateinamen im DTO
-            myDocDto.FileName = docFile.FileName;
+            myDocDto.filename = docFile.FileName;
 
             // Aktualisiere das Item im DAL, nutze das DTO
             var updateResponse = await client.PutAsJsonAsync($"/api/mydoc/{id}", myDocDto);
@@ -195,6 +195,20 @@ namespace ASP_Api_Demo.Controllers
             }
 
             return StatusCode((int)response.StatusCode, "Error deleting MyDoc item from DAL");
+        }
+
+        [HttpDelete("{id}/File")]
+        public async Task<IActionResult> DeleteFile(int id)
+        {
+            var client = _httpClientFactory.CreateClient("MyDocDAL");
+            var response = await client.DeleteAsync($"/api/mydoc/{id}/File");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return NoContent();
+            }
+
+            return StatusCode((int)response.StatusCode, "Error deleting MyDoc item File from DAL");
         }
 
         private void SendToMessageQueue(string fileName)

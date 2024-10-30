@@ -21,6 +21,8 @@ namespace ASP_Rest_API.Mappings
                     => opt.MapFrom(src => src.createddate))
                 .ForMember(dest => dest.editeddate, opt
                     => opt.MapFrom(src => src.editeddate))
+                .ForMember(dest => dest.filename, opt
+                    => opt.MapFrom(src => src.filename))
                 .ReverseMap()
                 .ForMember(dest => dest.id, opt
                     => opt.MapFrom(src => src.id))
@@ -33,7 +35,9 @@ namespace ASP_Rest_API.Mappings
                 .ForMember(dest => dest.createddate, opt
                     => opt.MapFrom(src => src.createddate))
                 .ForMember(dest => dest.editeddate, opt
-                    => opt.MapFrom(src => src.editeddate));
+                    => opt.MapFrom(src => src.editeddate))
+                .ForMember(dest => dest.filename, opt
+                    => opt.MapFrom(src => src.filename));
 
 
 

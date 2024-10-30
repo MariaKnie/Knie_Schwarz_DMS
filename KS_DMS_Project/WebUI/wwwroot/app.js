@@ -19,11 +19,16 @@ function fetchMyDocItems() {
                     <span class="block"> <strong>Author:</strong> ${myDoc.author} </span>
                     <span class="block"> <strong>TextField:</strong> ${myDoc.textfield}</span>
                     <br/>
-                    <span>File: ${myDoc.title || "No file uploaded"}</span>
+                    <span>File: ${myDoc.filename || "No file uploaded"}</span>
                     <input type="file" id="fileInput${myDoc.id}" />
                     <button style="margin-left: 10px;" onclick="uploadFile(${myDoc.id}, document.getElementById('fileInput${myDoc.id}'))">
                         Upload File
                     </button>
+                    ${myDoc.filename ? `
+                        <button class="delete" style="margin-left: 10px;" onclick="deleteFile(${myDoc.id})">
+                             Delete File
+                            </button>
+                        ` : ''}
                     <br/>
                     <button class="delete" style="margin-left: 10px;" onclick="deleteTask(${myDoc.id})">Delete</button>
                 `;
@@ -49,7 +54,7 @@ function uploadFile(Id, fileInput) {
     })
         .then(response => {
             if (response.ok) {
-                fetchTodoItems();
+                fetchMyDocItems();
                 alert("Datei erfolgreich hochgeladen.");
             } else {
                 alert("Fehler beim Hochladen der Datei.");
@@ -58,6 +63,22 @@ function uploadFile(Id, fileInput) {
         .catch(error => {
             console.error('Fehler:', error);
         });
+}
+
+
+// Function to delete a task
+function deleteFile(id) {
+    fetch(`${apiUrl}/${id}/File`, {
+        method: 'DELETE'
+    })
+        .then(response => {
+            if (response.ok) {
+                fetchMyDocItems(); // Refresh the list after deletion
+            } else {
+                console.error('Fehler beim Löschen des Files.');
+            }
+        })
+        .catch(error => console.error('Fehler:', error));
 }
 
 
