@@ -43,6 +43,9 @@ namespace MyDocDAL.Data
 
                 entity.Property(e => e.filename)
                     .HasMaxLength(255);
+
+                entity.Property(e => e.OcrText)
+                  .HasMaxLength(-1);
             });
 
             base.OnModelCreating(modelBuilder);

@@ -6,6 +6,8 @@ using ASP_Rest_API.DTO;
 using RabbitMQ.Client;
 using System.Text;
 using log4net;
+using ASP_Rest_API.Services;
+using System.Formats.Tar;
 
 namespace ASP_Api_Demo.Controllers
 {
@@ -22,7 +24,8 @@ namespace ASP_Api_Demo.Controllers
 
         private static readonly ILog log = LogManager.GetLogger(typeof(MyDocController));
 
-        public MyDocController(IHttpClientFactory httpClientFactory, IMapper mapper)
+        private readonly IMessageQueueService _messageQueueService;
+        public MyDocController(IHttpClientFactory httpClientFactory, IMapper mapper, IMessageQueueService messageQueueService)
         {
             _httpClientFactory = httpClientFactory;
             _mapper = mapper;
@@ -35,8 +38,8 @@ namespace ASP_Api_Demo.Controllers
 
             log.Info("Creating Queue");
             // Deklariere die Queue
-            _channel.QueueDeclare(queue: "file_queue", durable: false, exclusive: false, autoDelete: false, arguments: null);
-
+           // _channel.QueueDeclare(queue: "file_queue", durable: false, exclusive: false, autoDelete: false, arguments: null);
+            _messageQueueService = messageQueueService;
         }
 
         //private static List<MyDoc> documents = new List<MyDoc>
@@ -128,11 +131,14 @@ namespace ASP_Api_Demo.Controllers
                 return BadRequest("ID mismatch");
             }
 
+            Console.WriteLine($@"[PUT] Eingehender OcrText: {itemDto.OcrText}");
+
             itemDto.editeddate = DateTime.Now.ToUniversalTime();
 
             var client = _httpClientFactory.CreateClient("MyDocDAL");
             var item = _mapper.Map<MyDoc>(itemDto);
             var response = await client.PutAsJsonAsync($"/api/mydoc/{id}", item);
+            Console.WriteLine($@"[PUT] Gemappter OcrText: {item.OcrText}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -185,7 +191,7 @@ namespace ASP_Api_Demo.Controllers
             // Nachricht an RabbitMQ
             try
             {
-                SendToMessageQueue(docFile.FileName);
+               await SendToMessageQueue(id, docFile);
             }
             catch (Exception ex)
             {
@@ -226,12 +232,34 @@ namespace ASP_Api_Demo.Controllers
             return StatusCode((int)response.StatusCode, "Error deleting MyDoc item File from DAL");
         }
 
-        private void SendToMessageQueue(string fileName)
+        private async Task SendToMessageQueue(int id, IFormFile? taskFile)
         {
             // Sende die Nachricht in den RabbitMQ channel/queue
-            var body = Encoding.UTF8.GetBytes(fileName);
-            _channel.BasicPublish(exchange: "", routingKey: "file_queue", basicProperties: null, body: body);
-            Console.WriteLine($@"[x] Sent {fileName}");
+            var body = Encoding.UTF8.GetBytes(taskFile.FileName);
+           // _channel.BasicPublish(exchange: "", routingKey: "file_queue", basicProperties: null, body: body);
+
+
+            // Datei speichern (lokal im Container)
+            var filePath = Path.Combine("/app/uploads", taskFile.FileName);
+            Directory.CreateDirectory(Path.GetDirectoryName(filePath)!); // Erstelle das Verzeichnis, falls es nicht existiert
+            await using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await taskFile.CopyToAsync(stream);
+            }
+
+
+            // Nachricht an RabbitMQ
+            try
+            {
+                _messageQueueService.SendToQueue($"{id}|{filePath}");
+                Console.WriteLine($@"File Path {filePath} an RabbitMQ Queue gesendet.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Fehler beim Senden der Nachricht an RabbitMQ: {ex.Message}");
+            }
+
+            Console.WriteLine($@"[x] Sent {taskFile.FileName}");
         }
 
         public void Dispose()

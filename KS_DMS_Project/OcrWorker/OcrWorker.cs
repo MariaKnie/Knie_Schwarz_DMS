@@ -58,6 +58,9 @@ namespace OCRWorker
                 var message = Encoding.UTF8.GetString(body);
                 var parts = message.Split('|');
 
+                Console.WriteLine(body);
+                Console.WriteLine(message);
+
                 if (parts.Length == 2)
                 {
                     var id = parts[0];

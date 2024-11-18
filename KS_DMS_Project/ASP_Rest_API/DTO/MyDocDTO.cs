@@ -9,6 +9,7 @@
             public DateTime editeddate { get; set; }
             public string textfield { get; set; }
             public string? filename { get; set; }
+            public string? OcrText { get; set; }
 
 
     }
