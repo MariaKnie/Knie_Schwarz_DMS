@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "OcrWorker": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

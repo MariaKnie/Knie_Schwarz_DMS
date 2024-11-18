@@ -15,7 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projektmappenelemente", "Pr
 		launchSettings.json = launchSettings.json
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{C2C2A910-4B89-4ADE-B5CB-B9227B297D4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{C2C2A910-4B89-4ADE-B5CB-B9227B297D4B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OcrWorker", "OcrWorker\OcrWorker.csproj", "{269489C7-9208-439F-8846-8F9BF49CD438}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +77,18 @@ Global
 		{C2C2A910-4B89-4ADE-B5CB-B9227B297D4B}.Release|x64.Build.0 = Release|Any CPU
 		{C2C2A910-4B89-4ADE-B5CB-B9227B297D4B}.Release|x86.ActiveCfg = Release|Any CPU
 		{C2C2A910-4B89-4ADE-B5CB-B9227B297D4B}.Release|x86.Build.0 = Release|Any CPU
+		{269489C7-9208-439F-8846-8F9BF49CD438}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{269489C7-9208-439F-8846-8F9BF49CD438}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{269489C7-9208-439F-8846-8F9BF49CD438}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{269489C7-9208-439F-8846-8F9BF49CD438}.Debug|x64.Build.0 = Debug|Any CPU
+		{269489C7-9208-439F-8846-8F9BF49CD438}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{269489C7-9208-439F-8846-8F9BF49CD438}.Debug|x86.Build.0 = Debug|Any CPU
+		{269489C7-9208-439F-8846-8F9BF49CD438}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{269489C7-9208-439F-8846-8F9BF49CD438}.Release|Any CPU.Build.0 = Release|Any CPU
+		{269489C7-9208-439F-8846-8F9BF49CD438}.Release|x64.ActiveCfg = Release|Any CPU
+		{269489C7-9208-439F-8846-8F9BF49CD438}.Release|x64.Build.0 = Release|Any CPU
+		{269489C7-9208-439F-8846-8F9BF49CD438}.Release|x86.ActiveCfg = Release|Any CPU
+		{269489C7-9208-439F-8846-8F9BF49CD438}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
