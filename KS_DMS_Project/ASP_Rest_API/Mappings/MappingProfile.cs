@@ -23,8 +23,8 @@ namespace ASP_Rest_API.Mappings
                     => opt.MapFrom(src => src.editeddate))
                 .ForMember(dest => dest.filename, opt
                     => opt.MapFrom(src => src.filename))
-                .ForMember(dest => dest.OcrText, opt
-                    => opt.MapFrom(src => src.OcrText))
+                .ForMember(dest => dest.ocrtext, opt
+                    => opt.MapFrom(src => src.ocrtext))
                 .ReverseMap()
                 .ForMember(dest => dest.id, opt
                     => opt.MapFrom(src => src.id))
@@ -40,8 +40,8 @@ namespace ASP_Rest_API.Mappings
                     => opt.MapFrom(src => src.editeddate))
                 .ForMember(dest => dest.filename, opt
                     => opt.MapFrom(src => src.filename))
-                .ForMember(dest => dest.OcrText, opt
-                    => opt.MapFrom(src => src.OcrText));
+                .ForMember(dest => dest.ocrtext, opt
+                    => opt.MapFrom(src => src.ocrtext));
 
 
 

@@ -74,7 +74,7 @@ namespace MyDocDAL.Controllers
             existingItem.textfield = item.textfield;
             existingItem.createddate = existingItem.createddate.Value.ToUniversalTime();
             existingItem.editeddate = DateTime.Now.ToUniversalTime();
-            existingItem.OcrText = item.OcrText;
+            existingItem.ocrtext = item.ocrtext;
             if (item.filename != null)
             {
                 existingItem.filename = item.filename;

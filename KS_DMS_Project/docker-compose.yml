@@ -11,6 +11,9 @@ services:
       - ASPNETCORE_URLS=http://+:8081
     depends_on:
       - mydocdal
+      - rabbitmq
+    volumes:
+      - ./uploads:/app/uploads
 
   webui:
     image: web_ui_image

@@ -4,6 +4,7 @@ using ASP_Rest_API.Validators;
 using ASP_Rest_API.Mappings;
 using log4net.Config;
 using log4net;
+using ASP_Rest_API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +39,8 @@ builder.Services.AddCors(options =>
                 .AllowAnyMethod();
         });
 });
+
+builder.Services.AddSingleton<IMessageQueueService, MessageQueueService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

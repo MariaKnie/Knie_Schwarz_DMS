@@ -131,14 +131,14 @@ namespace ASP_Api_Demo.Controllers
                 return BadRequest("ID mismatch");
             }
 
-            Console.WriteLine($@"[PUT] Eingehender OcrText: {itemDto.OcrText}");
+            Console.WriteLine($@"[PUT] Eingehender OcrText: {itemDto.ocrtext}");
 
             itemDto.editeddate = DateTime.Now.ToUniversalTime();
 
             var client = _httpClientFactory.CreateClient("MyDocDAL");
             var item = _mapper.Map<MyDoc>(itemDto);
             var response = await client.PutAsJsonAsync($"/api/mydoc/{id}", item);
-            Console.WriteLine($@"[PUT] Gemappter OcrText: {item.OcrText}");
+            Console.WriteLine($@"[PUT] Gemappter OcrText: {item.ocrtext}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -247,6 +247,7 @@ namespace ASP_Api_Demo.Controllers
                 await taskFile.CopyToAsync(stream);
             }
 
+            Console.WriteLine($"{filePath} - should be derectory");
 
             // Nachricht an RabbitMQ
             try

@@ -81,7 +81,7 @@ namespace ASP_Rest_API.Services
                         }
 
                         var client = _httpClientFactory.CreateClient("MyDocDAL");
-                        var response = await client.GetAsync($"/api/todo/{id}");
+                        var response = await client.GetAsync($"/api/mydoc/{id}");
 
                         if (response.IsSuccessStatusCode)
                         {
@@ -92,9 +92,9 @@ namespace ASP_Rest_API.Services
                                 Console.WriteLine($@"[Listener] OCR Text für Task {id}: {extractedText}");
                                 Console.WriteLine($@"[Listener] Task vor Update: {todoItem}");
 
-                                todoItem.OcrText = extractedText;
+                                todoItem.ocrtext = extractedText;
 
-                                var updateResponse = await client.PutAsJsonAsync($"/api/todo/{id}", todoItem);
+                                var updateResponse = await client.PutAsJsonAsync($"/api/mydoc/{id}", todoItem);
                                 if (!updateResponse.IsSuccessStatusCode)
                                 {
                                     Console.WriteLine($@"Fehler beim Aktualisieren des Tasks mit ID {id}");
