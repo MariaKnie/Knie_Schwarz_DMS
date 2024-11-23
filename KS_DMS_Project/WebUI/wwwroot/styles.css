@@ -30,6 +30,14 @@ button {
 
     }
 
+    button.download {
+        background-color: #dc3545;
+        display: block;
+        margin-top: 10px;
+        padding: 8px 16px;
+        cursor: pointer;
+    }
+
     button:hover {
         opacity: 0.8;
     }

@@ -1,0 +1,23 @@
+Object Detection & Multi Object Classification - Literature:
+
+https://www.sciencedirect.com/science/article/pii/S0167865521000581
+https://link.springer.com/article/10.1007/s11042-021-10646-0
+
+https://repositum.tuwien.at/handle/20.500.12708/194745
+
+https://www.sciencedirect.com/science/article/pii/S0925231222004672
+
+https://stackoverflow.com/questions/66337588/multi-label-image-classification-vs-object-detection
+
+https://www.quora.com/How-could-you-classify-multiple-objects-in-a-single-image-in-TensorFlow
+____
+
+https://pyimagesearch.com/2020/10/12/multi-class-object-detection-and-bounding-box-regression-with-keras-tensorflow-and-deep-learning/
+____
+
+https://www.kaggle.com/datasets/davidemartinelli710/euro-coins-and-bills
+
+https://www.kaggle.com/datasets/yusufberksardoan/traffic-detection-project
+^^^^^^^^^^^^^^ (or get pictures from streetview)
+
+Do 21.8:00

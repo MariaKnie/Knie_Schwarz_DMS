@@ -108,19 +108,6 @@ namespace ASP_Api_Demo.Controllers
         }
 
 
-        [HttpGet("files")]
-        public async Task<IActionResult> ListFiles()
-        {
-            var objects = new List<string>();
-
-            await _minioClient.ListObjectsAsync(new ListObjectsArgs().WithBucket(BucketName))
-                .ForEachAsync(item =>
-                {
-                    objects.Add(item.Key);
-                });
-
-            return Ok(objects);
-        }
 
         [HttpPost]
         public async Task<IActionResult> Create(MyDocDTO itemDto)
@@ -260,7 +247,31 @@ namespace ASP_Api_Demo.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
+            
             var client = _httpClientFactory.CreateClient("MyDocDAL");
+
+            var response1 = await client.GetAsync($"/api/mydoc/{id}");
+
+            var item = await response1.Content.ReadFromJsonAsync<MyDoc>();
+            if (item != null)
+            {
+                var dtoItem = _mapper.Map<MyDocDTO>(item);
+                if(dtoItem.filename != null)
+                {
+                    try
+                    {
+                        await _minioClient.RemoveObjectAsync(new RemoveObjectArgs()
+                            .WithBucket(BucketName)
+                            .WithObject(dtoItem.filename));
+
+                    }
+                    catch (Exception ex)
+                    {
+                        return StatusCode(500, new { message = $"Fehler beim Löschen der Datei: {ex.Message}" });
+                    }
+                }
+            }
+            
             var response = await client.DeleteAsync($"/api/mydoc/{id}");
 
             if (response.IsSuccessStatusCode)
@@ -271,27 +282,35 @@ namespace ASP_Api_Demo.Controllers
             log.Error("Error deleting MyDoc item from DAL in Delete ID:" + id);
             return StatusCode((int)response.StatusCode, "Error deleting MyDoc item from DAL");
         }
-
-        [HttpDelete("{id}/{fileName}")]
-        public async Task<IActionResult> DeleteFile(int id, string fileName)
+        // Delete from Minio
+        [HttpDelete("delete/{fileName}")]
+        public async Task<IActionResult> DeleteFileFromMinio(string fileName)
         {
             try
             {
                 await _minioClient.RemoveObjectAsync(new RemoveObjectArgs()
                     .WithBucket(BucketName)
                     .WithObject(fileName));
+
+
+                return Ok(new { message = $"Datei '{fileName}' erfolgreich gelöscht." });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = $"Fehler beim Löschen der Datei: {ex.Message}" });
             }
+        }
 
+        // Delete File from DAL
+        [HttpDelete("{id}/File")]
+        public async Task<IActionResult> DeleteFile(int id)
+        {
             var client = _httpClientFactory.CreateClient("MyDocDAL");
             var response = await client.DeleteAsync($"/api/mydoc/{id}/File");
 
             if (response.IsSuccessStatusCode)
             {
-                return Ok(new { message = $"Datei '{fileName}' erfolgreich gelöscht." });
+                return Ok(new { message = $"Datei erfolgreich gelöscht." });
             }
 
             log.Error("Error deleting MyDoc item from DAL in Delete FILE ID:" + id);

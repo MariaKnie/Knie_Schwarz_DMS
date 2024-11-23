@@ -26,27 +26,18 @@ function fetchMyDocItems() {
                         Upload File
                     </button>
                     ${myDoc.filename ? `
-                        <button class="delete" style="margin-left: 10px;" onclick="deleteFile(${myDoc.id}, ${myDoc.filename})">
+                        <button class="delete" style="margin-left: 10px;" onclick="deleteFile(${myDoc.id}, '${myDoc.filename}')">
                              Delete File
-                            </button>
-                        <a href="/api/mydoc/download/${myDoc.filename}" download="${myDoc.filename}">
-                            Download ${myDoc.filename}
-                        </a>
+                        </button>
+                        <button class="download" style="margin-left: 10px;" onclick="downloadFile(${myDoc.id}, '${myDoc.filename}')">
+                             Download File
+                        </button>
                         ` : ''}
                     <br/>
                     <button class="delete" style="margin-left: 10px;" onclick="deleteTask(${myDoc.id})">Delete</button>
 
                 `;
 
-                // Create download link
-                if (myDoc.filename != "" || myDoc.filename != null) {
-                    const downloadLink = document.createElement("a");
-                    downloadLink.href = `/api/mydoc/download/${myDoc.filename}`;
-                    downloadLink.innerText = `Download ${myDoc.filename}`;
-                    downloadLink.download = myDoc.filename;
-
-                    li.appendChild(downloadLink);
-                }
                 DocList.appendChild(li);
             });
         })
@@ -80,20 +71,73 @@ function uploadFile(Id, fileInput) {
         });
 }
 
-
-// Function to delete a task
-function deleteFile(id, filename) {
-    fetch(`${apiUrl}/${id}/${filename}`, {
-        method: 'DELETE'
+function downloadFile(id, fileName) {
+    fetch(`${apiUrl}/download/${fileName}`, {
+        method: 'GET',
     })
         .then(response => {
             if (response.ok) {
-                fetchMyDocItems(); // Refresh the list after deletion
+                // Create a blob link to trigger the download
+                response.blob().then(blob => {
+                    const link = document.createElement('a');
+                    const url = window.URL.createObjectURL(blob);
+                    link.href = url;
+                    link.download = fileName;  // File name for the downloaded file
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url);  // Clean up the URL object
+                    console.log(`File ${fileName} downloaded successfully.`);
+                });
             } else {
-                console.error('Fehler beim Löschen des Files.');
+                console.error('Error downloading the file');
             }
         })
         .catch(error => console.error('Fehler:', error));
+}
+
+
+// Function to delete a file
+function deleteFile(id, filename) {
+    if (!filename) {
+        console.error("No file to delete");
+        return;
+    }
+
+    // Delete the file from the backend (DAL)
+    fetch(`${apiUrl}/${id}/File`, {
+        method: 'DELETE',
+    })
+        .then(response => {
+            if (response.ok) {
+                fetchMyDocItems(); 
+                alert("File deleted successfully from DAL.");
+            } else {
+                console.error('Error while deleting the file from DAL.');
+                alert("Error deleting the file from DAL.");
+            }
+        })
+        .catch(error => {
+            console.error('Fehler:', error);
+            alert("An error occurred while deleting the file from DAL.");
+        });
+
+    // Delete file from storage (Minio)
+    fetch(`${apiUrl}/delete/${filename}`, {
+        method: 'DELETE',
+    })
+        .then(response => {
+            if (response.ok) {
+                alert("File deleted successfully from storage.");
+            } else {
+                console.error('Error while deleting the file from storage.');
+                alert("Error deleting the file from storage.");
+            }
+        })
+        .catch(error => {
+            console.error('Fehler:', error);
+            alert("An error occurred while deleting the file from storage.");
+        });
 }
 
 
