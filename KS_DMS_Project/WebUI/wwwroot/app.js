@@ -9,6 +9,7 @@ function fetchMyDocItems() {
             const DocList = document.getElementById('myDocList');
             DocList.innerHTML = ''; // Clear the list before appending new items
             data.forEach(myDoc => {
+
                 // Create list item with delete and toggle complete buttons
                 const li = document.createElement('li'); //| Completed: ${task.isComplete} <button style="margin-left: 10px;" onclick="toggleComplete(${myDoc.id}, ${myDoc.isComplete}, '${myDoc.title}')">  Mark as ${ myDoc.isComplete ? 'Incomplete' : 'Complete' }
                 li.innerHTML = `
@@ -25,13 +26,27 @@ function fetchMyDocItems() {
                         Upload File
                     </button>
                     ${myDoc.filename ? `
-                        <button class="delete" style="margin-left: 10px;" onclick="deleteFile(${myDoc.id})">
+                        <button class="delete" style="margin-left: 10px;" onclick="deleteFile(${myDoc.id}, ${myDoc.filename})">
                              Delete File
                             </button>
+                        <a href="/api/mydoc/download/${myDoc.filename}" download="${myDoc.filename}">
+                            Download ${myDoc.filename}
+                        </a>
                         ` : ''}
                     <br/>
                     <button class="delete" style="margin-left: 10px;" onclick="deleteTask(${myDoc.id})">Delete</button>
+
                 `;
+
+                // Create download link
+                if (myDoc.filename != "" || myDoc.filename != null) {
+                    const downloadLink = document.createElement("a");
+                    downloadLink.href = `/api/mydoc/download/${myDoc.filename}`;
+                    downloadLink.innerText = `Download ${myDoc.filename}`;
+                    downloadLink.download = myDoc.filename;
+
+                    li.appendChild(downloadLink);
+                }
                 DocList.appendChild(li);
             });
         })
@@ -67,8 +82,8 @@ function uploadFile(Id, fileInput) {
 
 
 // Function to delete a task
-function deleteFile(id) {
-    fetch(`${apiUrl}/${id}/File`, {
+function deleteFile(id, filename) {
+    fetch(`${apiUrl}/${id}/${filename}`, {
         method: 'DELETE'
     })
         .then(response => {

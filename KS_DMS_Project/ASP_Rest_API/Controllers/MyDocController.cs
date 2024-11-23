@@ -8,6 +8,9 @@ using System.Text;
 using log4net;
 using ASP_Rest_API.Services;
 using System.Formats.Tar;
+using Minio;
+using Minio.DataModel.Args;
+using System.Reactive.Linq;
 
 namespace ASP_Api_Demo.Controllers
 {
@@ -21,6 +24,8 @@ namespace ASP_Api_Demo.Controllers
         private readonly IMapper _mapper;
         private readonly IConnection _connection;
         private readonly IModel _channel;
+        private readonly IMinioClient _minioClient;
+        private const string BucketName = "uploads";
 
         private static readonly ILog log = LogManager.GetLogger(typeof(MyDocController));
 
@@ -40,6 +45,12 @@ namespace ASP_Api_Demo.Controllers
             // Deklariere die Queue
            // _channel.QueueDeclare(queue: "file_queue", durable: false, exclusive: false, autoDelete: false, arguments: null);
             _messageQueueService = messageQueueService;
+
+            _minioClient = new MinioClient()
+                .WithEndpoint("minio", 9000)
+                .WithCredentials("minioadmin", "minioadmin")
+                .WithSSL(false)
+                .Build();
         }
 
         //private static List<MyDoc> documents = new List<MyDoc>
@@ -96,6 +107,20 @@ namespace ASP_Api_Demo.Controllers
             return StatusCode((int)response.StatusCode, "Error retrieving MyDoc item from DAL");
         }
 
+
+        [HttpGet("files")]
+        public async Task<IActionResult> ListFiles()
+        {
+            var objects = new List<string>();
+
+            await _minioClient.ListObjectsAsync(new ListObjectsArgs().WithBucket(BucketName))
+                .ForEachAsync(item =>
+                {
+                    objects.Add(item.Key);
+                });
+
+            return Ok(objects);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Create(MyDocDTO itemDto)
@@ -177,6 +202,17 @@ namespace ASP_Api_Demo.Controllers
 
             var myDocDto = _mapper.Map<MyDoc>(myDoc);
 
+            // Minio stuff
+            await EnsureBucketExists();
+            var fileName = docFile.FileName;
+            await using var fileStream = docFile.OpenReadStream();
+
+            await _minioClient.PutObjectAsync(new PutObjectArgs()
+                .WithBucket(BucketName)
+                .WithObject(fileName)
+                .WithStreamData(fileStream)
+                .WithObjectSize(docFile.Length));
+
             // Setze den Dateinamen im DTO
             myDocDto.filename = docFile.FileName;
 
@@ -202,6 +238,25 @@ namespace ASP_Api_Demo.Controllers
             return Ok(new { message = $"Dateiname {docFile.FileName} für Doc {id} erfolgreich gespeichert." });
         }
 
+
+        [HttpGet("download/{fileName}")]
+        public async Task<IActionResult> DownloadFile(string fileName)
+        {
+            var memoryStream = new MemoryStream();
+
+            await _minioClient.GetObjectAsync(new GetObjectArgs()
+                .WithBucket(BucketName)
+                .WithObject(fileName)
+                .WithCallbackStream(stream =>
+                {
+                    stream.CopyTo(memoryStream);
+                }));
+
+            memoryStream.Position = 0;
+            return File(memoryStream, "application/octet-stream", fileName);
+        }
+
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -217,19 +272,39 @@ namespace ASP_Api_Demo.Controllers
             return StatusCode((int)response.StatusCode, "Error deleting MyDoc item from DAL");
         }
 
-        [HttpDelete("{id}/File")]
-        public async Task<IActionResult> DeleteFile(int id)
+        [HttpDelete("{id}/{fileName}")]
+        public async Task<IActionResult> DeleteFile(int id, string fileName)
         {
+            try
+            {
+                await _minioClient.RemoveObjectAsync(new RemoveObjectArgs()
+                    .WithBucket(BucketName)
+                    .WithObject(fileName));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = $"Fehler beim Löschen der Datei: {ex.Message}" });
+            }
+
             var client = _httpClientFactory.CreateClient("MyDocDAL");
             var response = await client.DeleteAsync($"/api/mydoc/{id}/File");
 
             if (response.IsSuccessStatusCode)
             {
-                return NoContent();
+                return Ok(new { message = $"Datei '{fileName}' erfolgreich gelöscht." });
             }
 
             log.Error("Error deleting MyDoc item from DAL in Delete FILE ID:" + id);
             return StatusCode((int)response.StatusCode, "Error deleting MyDoc item File from DAL");
+        }
+
+        private async Task EnsureBucketExists()
+        {
+            bool found = await _minioClient.BucketExistsAsync(new BucketExistsArgs().WithBucket(BucketName));
+            if (!found)
+            {
+                await _minioClient.MakeBucketAsync(new MakeBucketArgs().WithBucket(BucketName));
+            }
         }
 
         private async Task SendToMessageQueue(int id, IFormFile? taskFile)

@@ -5,6 +5,7 @@ using ASP_Rest_API.Mappings;
 using log4net.Config;
 using log4net;
 using ASP_Rest_API.Services;
+using Minio;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +41,18 @@ builder.Services.AddCors(options =>
         });
 });
 
+//Used for testing -- could maybe be removed
+builder.Services.AddSingleton<IMinioClient>(provider =>
+{
+    // Configure the MinioClient here
+    return new MinioClient()
+        .WithEndpoint("minio", 9000)  // Use Docker service name instead of localhost
+        .WithCredentials("minioadmin", "minioadmin")
+        .WithSSL(false)  // Disable SSL to use HTTP
+        .Build();
+});
+
+
 builder.Services.AddSingleton<IMessageQueueService, MessageQueueService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -51,6 +64,7 @@ builder.Services.AddSwaggerGen(c =>
 
     c.IncludeXmlComments(xmlPath);
 });
+
 
 // Registriere HttpClient für den TodoController
 builder.Services.AddHttpClient("MyDocDAL", client =>
