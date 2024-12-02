@@ -85,6 +85,7 @@ namespace OCRWorker
                         _channel.BasicPublish(exchange: "", routingKey: "ocr_result_queue", basicProperties: null, body: resultBody);
 
                         Console.WriteLine($"[x] Sent result for ID: {id}");
+                        Console.WriteLine($"[x] Sent result for ID Text: {extractedText}");
                     }
                 } else
                 {

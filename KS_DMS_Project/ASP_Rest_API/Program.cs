@@ -52,8 +52,9 @@ builder.Services.AddSingleton<IMinioClient>(provider =>
         .Build();
 });
 
-
+builder.Services.AddControllers();
 builder.Services.AddSingleton<IMessageQueueService, MessageQueueService>();
+builder.Services.AddHostedService<RabbitMqListenerService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
