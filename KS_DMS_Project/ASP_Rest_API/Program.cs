@@ -6,6 +6,7 @@ using log4net.Config;
 using log4net;
 using ASP_Rest_API.Services;
 using Minio;
+using Elastic.Clients.Elasticsearch;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +52,10 @@ builder.Services.AddSingleton<IMinioClient>(provider =>
         .WithSSL(false)  // Disable SSL to use HTTP
         .Build();
 });
+
+var elasticUri = builder.Configuration.GetConnectionString("ElasticSearch") ?? "http://localhost:9200";
+builder.Services.AddSingleton(new ElasticsearchClient(new Uri(elasticUri)));
+
 
 builder.Services.AddControllers();
 builder.Services.AddSingleton<IMessageQueueService, MessageQueueService>();

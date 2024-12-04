@@ -11,6 +11,9 @@ using System.Formats.Tar;
 using Minio;
 using Minio.DataModel.Args;
 using System.Reactive.Linq;
+using Elastic.Clients.Elasticsearch;
+using Elastic.Clients.Elasticsearch.Nodes;
+using Elastic.Clients.Elasticsearch.Ingest;
 
 namespace ASP_Api_Demo.Controllers
 {
@@ -25,15 +28,17 @@ namespace ASP_Api_Demo.Controllers
         private readonly IConnection _connection;
         private readonly IModel _channel;
         private readonly IMinioClient _minioClient;
+        private readonly ElasticsearchClient _elasticClient;
         private const string BucketName = "uploads";
 
         private static readonly ILog log = LogManager.GetLogger(typeof(MyDocController));
 
         private readonly IMessageQueueService _messageQueueService;
-        public MyDocController(IHttpClientFactory httpClientFactory, IMapper mapper, IMessageQueueService messageQueueService)
+        public MyDocController(IHttpClientFactory httpClientFactory, IMapper mapper, IMessageQueueService messageQueueService, ElasticsearchClient elasticClient)
         {
             _httpClientFactory = httpClientFactory;
             _mapper = mapper;
+            _elasticClient = elasticClient;
 
             log.Info("Creating Factory, connection and channel");
             // Stelle die Verbindung zu RabbitMQ her
@@ -116,6 +121,15 @@ namespace ASP_Api_Demo.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            // debug
+            var indexResponse = await _elasticClient.IndexAsync(itemDto, i => i.Index("documents"));
+            //if (indexResponse.IsValidResponse)
+            //{
+            //    return Ok(new { message = "Document indexed successfully" });
+            //}
+            //return StatusCode(500, new { message = "Failed to index document", details = indexResponse.DebugInformation });
+
 
             var client = _httpClientFactory.CreateClient("MyDocDAL");
             var item = _mapper.Map<MyDoc>(itemDto);
@@ -363,5 +377,54 @@ namespace ASP_Api_Demo.Controllers
             _connection?.Close();
         }
 
+
+        // Wildcard-Search (QueryString)
+        [HttpPost("search/querystring")]
+        public async Task<IActionResult> SearchByQueryString([FromBody] string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return BadRequest(new { message = "Search term cannot be empty" });
+            }
+
+            var response = await _elasticClient.SearchAsync<MyDocDTO>(s => s
+                .Index("documents")
+                .Query(q => q.QueryString(qs => qs.Query($"*{searchTerm}*"))));
+
+            return HandleSearchResponse(response);
+        }
+
+        // Fuzzy-Search with Match(Normalisation)
+        [HttpPost("search/fuzzy")]
+        public async Task<IActionResult> SearchByFuzzy([FromBody] string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return BadRequest(new { message = "Search term cannot be empty" });
+            }
+
+            var response = await _elasticClient.SearchAsync<MyDocDTO>(s => s
+                .Index("documents")
+                .Query(q => q.Match(m => m
+                    .Field(f => f.ocrtext)
+                    .Query(searchTerm)
+                    .Fuzziness(new Fuzziness(4)))));
+
+            return HandleSearchResponse(response);
+        }
+
+        private IActionResult HandleSearchResponse(SearchResponse<MyDocDTO> response)
+        {
+            if (response.IsValidResponse)
+            {
+                if (response.Documents.Any())
+                {
+                    return Ok(response.Documents);
+                }
+                return NotFound(new { message = "No documents found matching the search term." });
+            }
+
+            return StatusCode(500, new { message = "Failed to search documents", details = response.DebugInformation });
+        }
     }
 }

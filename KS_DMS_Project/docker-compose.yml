@@ -13,6 +13,7 @@ services:
       - mydocdal
       - rabbitmq
       - minio
+      - elasticsearch
     volumes:
       - ./uploads:/app/uploads
 
@@ -83,6 +84,31 @@ services:
     volumes:
       - ./uploads:/app/uploads
 
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.16.0
+    container_name: elasticsearch
+    ports:
+      - "9200:9200"
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    volumes:
+      - ./elasticsearch-data:/data
+    networks:
+      - elastic
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.16.0
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    environment:
+      - ELASTICSEARCH_URL=http://localhost:9200
+    networks:
+      - elastic
+
   minio:
     image: minio/minio
     container_name: minio
@@ -96,5 +122,11 @@ services:
     volumes:
       - ./uploads:/app/uploads
 
+
+
 volumes:
   postgres_data: 
+
+networks:
+  elastic:
+    driver: bridge
