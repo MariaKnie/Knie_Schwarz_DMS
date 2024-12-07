@@ -1,4 +1,9 @@
-﻿using RabbitMQ.Client;
+﻿using MyDocDAL.Entities;
+using AutoMapper;
+using ASP_Rest_API.DTO;
+using ASP_Rest_API;
+using MyDocDAL;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.IO;
@@ -6,6 +11,8 @@ using System.Text;
 using ImageMagick;
 using Tesseract;
 using System.Diagnostics;
+using System.Net.Http.Json;
+using ASP_Rest_API.Mappings;
 
 namespace OCRWorker
 {
@@ -13,10 +20,23 @@ namespace OCRWorker
     {
         private IConnection _connection;
         private IModel _channel;
+        private readonly HttpClient _httpClient;
+        private IMapper _mapper;
 
         public OcrWorker()
         {
+            _httpClient = new HttpClient
+            {
+                BaseAddress = new Uri("http://mydocdal:8082") 
+            };
             ConnectToRabbitMQ();
+
+            // Manually configure AutoMapper
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+            _mapper = config.CreateMapper();
         }
 
         private void ConnectToRabbitMQ()
@@ -52,7 +72,7 @@ namespace OCRWorker
         public void Start()
         {
             var consumer = new EventingBasicConsumer(_channel);
-            consumer.Received += (model, ea) =>
+            consumer.Received += async (model, ea) =>
             {
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
@@ -86,6 +106,8 @@ namespace OCRWorker
 
                         Console.WriteLine($"[x] Sent result for ID: {id}");
                         Console.WriteLine($"[x] Sent result for ID Text: {extractedText}");
+
+                        await SendOcrTextToApi(id, extractedText);
                     }
                 } else
                 {
@@ -151,6 +173,26 @@ namespace OCRWorker
             return stringBuilder.ToString();
         }
 
+        private async Task SendOcrTextToApi(string id, string extractedText)
+        {
+            
+
+            var response = await _httpClient.GetAsync($"/api/mydoc/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var item = await response.Content.ReadFromJsonAsync<MyDoc>();
+                var dtoItem = _mapper.Map<ASP_Rest_API.DTO.MyDocDTO>(item);
+                dtoItem.ocrtext = extractedText;
+                var response2 = await _httpClient.PutAsJsonAsync($"/api/mydoc/{id}", dtoItem);
+            };
+            
+
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"Error updating OCR text for ID {id}: {response.StatusCode}");
+            }
+        }
         public void Dispose()
         {
             _channel?.Close();

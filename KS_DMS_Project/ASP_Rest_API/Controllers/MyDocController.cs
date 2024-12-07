@@ -58,19 +58,6 @@ namespace ASP_Api_Demo.Controllers
                 .Build();
         }
 
-        //private static List<MyDoc> documents = new List<MyDoc>
-        //{
-        //   new MyDoc(1, "whale" , DateTime.Now, DateTime.Now, "Ann", "me"),
-        //   new MyDoc(2, "fish" , DateTime.Now, DateTime.Now, "Bob", "ma"),
-        //   new MyDoc(3, "deer" , DateTime.Now, DateTime.Now, "Cindy", "mu")
-        //};
-
-        /// <summary>
-        /// Gibt eine Liste von MyDocs zurück. Optional können Titel und/oder Author gefiltert werden
-        /// </summary>
-        /// <param name="author">Der Author des MyDocs, nach dem gefiltert werden kann (string, optional)</param>
-        /// <param name="title">Der Title des MyDocs, (string, optional)</param>
-        /// <returns>IEnumearble<MyDoc></MyDoc></returns>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -217,6 +204,17 @@ namespace ASP_Api_Demo.Controllers
             // Setze den Dateinamen im DTO
             myDocDto.filename = docFile.FileName;
 
+            // Nachricht an RabbitMQ
+            try
+            {
+                await SendToMessageQueue(id, docFile);
+            }
+            catch (Exception ex)
+            {
+                log.Error("Fehler beim Senden der Nachricht an RabbitMQ:" + ex.Message);
+                return StatusCode(500, $"Fehler beim Senden der Nachricht an RabbitMQ: {ex.Message}");
+            }
+
             // Aktualisiere das Item im DAL, nutze das DTO
             var updateResponse = await client.PutAsJsonAsync($"/api/mydoc/{id}", myDocDto);
             if (!updateResponse.IsSuccessStatusCode)
@@ -225,16 +223,6 @@ namespace ASP_Api_Demo.Controllers
                 return StatusCode((int)updateResponse.StatusCode, $"Fehler beim Speichern des Dateinamens für Doc {id}");
             }
 
-            // Nachricht an RabbitMQ
-            try
-            {
-               await SendToMessageQueue(id, docFile);
-            }
-            catch (Exception ex)
-            {
-                log.Error("Fehler beim Senden der Nachricht an RabbitMQ:" + ex.Message);
-                return StatusCode(500, $"Fehler beim Senden der Nachricht an RabbitMQ: {ex.Message}");
-            }
 
             return Ok(new { message = $"Dateiname {docFile.FileName} für Doc {id} erfolgreich gespeichert." });
         }
