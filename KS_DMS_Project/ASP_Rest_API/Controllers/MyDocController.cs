@@ -215,15 +215,6 @@ namespace ASP_Api_Demo.Controllers
                 return StatusCode(500, $"Fehler beim Senden der Nachricht an RabbitMQ: {ex.Message}");
             }
 
-            // Aktualisiere das Item im DAL, nutze das DTO
-            var updateResponse = await client.PutAsJsonAsync($"/api/mydoc/{id}", myDocDto);
-            if (!updateResponse.IsSuccessStatusCode)
-            {
-                log.Error("Fehler beim Speichern des Dateinamens für Doc " + id);
-                return StatusCode((int)updateResponse.StatusCode, $"Fehler beim Speichern des Dateinamens für Doc {id}");
-            }
-
-
             return Ok(new { message = $"Dateiname {docFile.FileName} für Doc {id} erfolgreich gespeichert." });
         }
 

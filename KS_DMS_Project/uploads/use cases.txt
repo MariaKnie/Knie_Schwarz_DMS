@@ -1,7 +1,0 @@
-use cases:
-counting the transporters/trucks to calculate the potential improvement to air quality(alt. bridge load)
-
-analysis of bought groceries to make better costumer recommendations ("andere die dieses Produkt gekauft haben, kauften auch...")
-
-Comparison of work traffic on car-free days
-
