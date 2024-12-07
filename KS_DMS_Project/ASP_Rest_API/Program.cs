@@ -2,9 +2,10 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using ASP_Rest_API.Validators;
 using ASP_Rest_API.Mappings;
+using ASP_Rest_API.Services;
 using log4net.Config;
 using log4net;
-using ASP_Rest_API.Services;
+using ASP_Rest_API.SearchItems;
 using Minio;
 using Elastic.Clients.Elasticsearch;
 
@@ -53,8 +54,8 @@ builder.Services.AddSingleton<IMinioClient>(provider =>
         .Build();
 });
 
-var elasticUri = builder.Configuration.GetConnectionString("ElasticSearch") ?? "http://localhost:9200";
-builder.Services.AddSingleton(new ElasticsearchClient(new Uri(elasticUri)));
+builder.Services.Configure<ElasticSettings>(builder.Configuration.GetSection("ElasticSettings"));
+builder.Services.AddSingleton<IElasticService, ElasticService>();
 
 
 builder.Services.AddControllers();

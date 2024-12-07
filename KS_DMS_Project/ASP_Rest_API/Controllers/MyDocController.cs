@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata;
 using AutoMapper;
 using ASP_Rest_API.DTO;
+using ASP_Rest_API.SearchItems;
 using RabbitMQ.Client;
 using System.Text;
 using log4net;
@@ -28,17 +29,17 @@ namespace ASP_Api_Demo.Controllers
         private readonly IConnection _connection;
         private readonly IModel _channel;
         private readonly IMinioClient _minioClient;
-        private readonly ElasticsearchClient _elasticClient;
+        private readonly ElasticService _elasticService;
         private const string BucketName = "uploads";
 
         private static readonly ILog log = LogManager.GetLogger(typeof(MyDocController));
 
         private readonly IMessageQueueService _messageQueueService;
-        public MyDocController(IHttpClientFactory httpClientFactory, IMapper mapper, IMessageQueueService messageQueueService, ElasticsearchClient elasticClient)
+        public MyDocController(IHttpClientFactory httpClientFactory, IMapper mapper, IMessageQueueService messageQueueService, ElasticService elasticService)
         {
             _httpClientFactory = httpClientFactory;
             _mapper = mapper;
-            _elasticClient = elasticClient;
+            _elasticService = elasticService;
 
             log.Info("Creating Factory, connection and channel");
             // Stelle die Verbindung zu RabbitMQ her
@@ -109,14 +110,7 @@ namespace ASP_Api_Demo.Controllers
                 return BadRequest(ModelState);
             }
 
-            // debug
-            var indexResponse = await _elasticClient.IndexAsync(itemDto, i => i.Index("documents"));
-            //if (indexResponse.IsValidResponse)
-            //{
-            //    return Ok(new { message = "Document indexed successfully" });
-            //}
-            //return StatusCode(500, new { message = "Failed to index document", details = indexResponse.DebugInformation });
-
+            
 
             var client = _httpClientFactory.CreateClient("MyDocDAL");
             var item = _mapper.Map<MyDoc>(itemDto);
@@ -129,6 +123,45 @@ namespace ASP_Api_Demo.Controllers
 
             log.Error("Error retrieving MyDoc items from DAL In Post");
             return StatusCode((int)response.StatusCode, "Error creating MyDoc item in DAL");
+        }
+
+        [HttpPost("create-index")]
+        public async Task<IActionResult> CreateIndex(string indexName)
+        {
+            await _elasticService.CreateIndexIfNotExistsAsync(indexName);
+            return Ok($"Index {indexName} created or exists");
+        }
+
+        [HttpPost("add-document")]
+        public async Task<IActionResult> AddDocument([FromBody] Doc document)
+        {
+            var result = await _elasticService.AddOrUpdate(document);
+            return result ? Ok($"Document added") : StatusCode(500, "Error adding ducument to elasticsearch");
+
+        }
+
+        [HttpGet("get-document/{key}")]
+        public async Task<IActionResult> GetDocument(string document)
+        {
+            var result = await _elasticService.Get(document);
+            return result != null ?  Ok(document) : NotFound("Document not found");
+
+        }
+
+        [HttpGet("get-all-documents")]
+        public async Task<IActionResult> GetAllDocuments()
+        {
+            var results = await _elasticService.GetAll();
+            return results != null ? Ok(results) : StatusCode(500, "Error retrieving documents");
+
+        }
+
+        [HttpDelete("delete-document/{key}")]
+        public async Task<IActionResult> DeleteDocument(string key)
+        {
+            var result = await _elasticService.Remove(key);
+            return result ? Ok("Document deleted") : StatusCode(500, "Error deleting documents");
+
         }
 
         [HttpPut("{id}")]
@@ -214,6 +247,15 @@ namespace ASP_Api_Demo.Controllers
                 log.Error("Fehler beim Senden der Nachricht an RabbitMQ:" + ex.Message);
                 return StatusCode(500, $"Fehler beim Senden der Nachricht an RabbitMQ: {ex.Message}");
             }
+
+            // debug
+            //var indexResponse = await _elasticClient.IndexAsync(myDocDto, i => i.Index("documents"));
+            //if (indexResponse.IsValidResponse)
+            //{
+            //    return Ok(new { message = "Document indexed successfully" });
+            //}
+            //return StatusCode(500, new { message = "Failed to index document", details = indexResponse.DebugInformation });
+
 
             return Ok(new { message = $"Dateiname {docFile.FileName} für Doc {id} erfolgreich gespeichert." });
         }
@@ -355,7 +397,7 @@ namespace ASP_Api_Demo.Controllers
             _channel?.Close();
             _connection?.Close();
         }
-
+        /*
 
         // Wildcard-Search (QueryString)
         [HttpPost("search/querystring")]
@@ -405,5 +447,7 @@ namespace ASP_Api_Demo.Controllers
 
             return StatusCode(500, new { message = "Failed to search documents", details = response.DebugInformation });
         }
+
+        */
     }
 }
