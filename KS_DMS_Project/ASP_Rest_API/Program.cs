@@ -54,8 +54,11 @@ builder.Services.AddSingleton<IMinioClient>(provider =>
         .Build();
 });
 
-builder.Services.Configure<ElasticSettings>(builder.Configuration.GetSection("ElasticSettings"));
-builder.Services.AddSingleton<IElasticService, ElasticService>();
+var elasticUri = builder.Configuration.GetConnectionString("ElasticSearch") ?? "http://localhost:9200";
+builder.Services.AddSingleton(new ElasticsearchClient(new Uri(elasticUri)));
+
+//builder.Services.Configure<ElasticSettings>(builder.Configuration.GetSection("ElasticSettings"));
+//builder.Services.AddSingleton<IElasticService, ElasticService>();
 
 
 builder.Services.AddControllers();

@@ -15,6 +15,7 @@ using System.Reactive.Linq;
 using Elastic.Clients.Elasticsearch;
 using Elastic.Clients.Elasticsearch.Nodes;
 using Elastic.Clients.Elasticsearch.Ingest;
+using Elastic.Transport;
 
 namespace ASP_Api_Demo.Controllers
 {
@@ -29,17 +30,26 @@ namespace ASP_Api_Demo.Controllers
         private readonly IConnection _connection;
         private readonly IModel _channel;
         private readonly IMinioClient _minioClient;
-        private readonly IElasticService _elasticService;
+        //private readonly IElasticService _elasticService;
+        private readonly ElasticsearchClient _elasticClient;
         private const string BucketName = "uploads";
 
         private static readonly ILog log = LogManager.GetLogger(typeof(MyDocController));
 
         private readonly IMessageQueueService _messageQueueService;
-        public MyDocController(IHttpClientFactory httpClientFactory, IMapper mapper, IMessageQueueService messageQueueService, IElasticService elasticService)
+        //public MyDocController(IHttpClientFactory httpClientFactory, IMapper mapper, IMessageQueueService messageQueueService, IElasticService elasticService)
+        public MyDocController(IHttpClientFactory httpClientFactory, IMapper mapper, IMessageQueueService messageQueueService, ElasticsearchClient elasticClient)
         {
             _httpClientFactory = httpClientFactory;
             _mapper = mapper;
-            _elasticService = elasticService;
+            //_elasticService = elasticService;
+            _elasticClient = elasticClient;
+
+            var settings = new ElasticsearchClientSettings(new Uri("http://elasticsearch:9200"))
+                .Authentication(new BasicAuthentication("", ""))
+                .DefaultIndex("documents");
+
+            _elasticClient = new ElasticsearchClient(settings);
 
             log.Info("Creating Factory, connection and channel");
             // Stelle die Verbindung zu RabbitMQ her
@@ -125,6 +135,7 @@ namespace ASP_Api_Demo.Controllers
             return StatusCode((int)response.StatusCode, "Error creating MyDoc item in DAL");
         }
 
+        /*
         [HttpPost("create-index")]
         public async Task<IActionResult> CreateIndex(string indexName)
         {
@@ -163,6 +174,7 @@ namespace ASP_Api_Demo.Controllers
             return result ? Ok("Document deleted") : StatusCode(500, "Error deleting documents");
 
         }
+        */
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, MyDocDTO itemDto)
@@ -248,13 +260,22 @@ namespace ASP_Api_Demo.Controllers
                 return StatusCode(500, $"Fehler beim Senden der Nachricht an RabbitMQ: {ex.Message}");
             }
 
+            //used to debug
+            Thread.Sleep(1000);
+            // Get ocrtext
+            var response2 = await client.GetAsync($"/api/mydoc/{id}");
+            var myDoc2 = await response2.Content.ReadFromJsonAsync<MyDocDTO>();
+            var doc2add = new Doc() { Id = id, OcrText = myDoc2.ocrtext };
             // debug
-            //var indexResponse = await _elasticClient.IndexAsync(myDocDto, i => i.Index("documents"));
-            //if (indexResponse.IsValidResponse)
-            //{
-            //    return Ok(new { message = "Document indexed successfully" });
-            //}
-            //return StatusCode(500, new { message = "Failed to index document", details = indexResponse.DebugInformation });
+
+            var indexResponse = await _elasticClient.IndexAsync(doc2add, idx =>
+            idx.Index("documents")
+                .OpType(OpType.Index));
+            if (indexResponse.IsValidResponse)
+            {
+                return Ok(new { message = "Document indexed successfully" });
+            }
+            return StatusCode(500, new { message = "Failed to index document", details = indexResponse.DebugInformation });
 
 
             return Ok(new { message = $"Dateiname {docFile.FileName} für Doc {id} erfolgreich gespeichert." });
@@ -397,7 +418,7 @@ namespace ASP_Api_Demo.Controllers
             _channel?.Close();
             _connection?.Close();
         }
-        /*
+        
 
         // Wildcard-Search (QueryString)
         [HttpPost("search/querystring")]
@@ -408,9 +429,9 @@ namespace ASP_Api_Demo.Controllers
                 return BadRequest(new { message = "Search term cannot be empty" });
             }
 
-            var response = await _elasticClient.SearchAsync<MyDocDTO>(s => s
+            var response = await _elasticClient.SearchAsync<Doc>(s => s
                 .Index("documents")
-                .Query(q => q.QueryString(qs => qs.Query($"*{searchTerm}*"))));
+                .Query(q => q.QueryString(qs => qs.Query($"{searchTerm}"))));
 
             return HandleSearchResponse(response);
         }
@@ -424,17 +445,17 @@ namespace ASP_Api_Demo.Controllers
                 return BadRequest(new { message = "Search term cannot be empty" });
             }
 
-            var response = await _elasticClient.SearchAsync<MyDocDTO>(s => s
+            var response = await _elasticClient.SearchAsync<Doc>(s => s
                 .Index("documents")
                 .Query(q => q.Match(m => m
-                    .Field(f => f.ocrtext)
+                    .Field(f => f.OcrText)
                     .Query(searchTerm)
                     .Fuzziness(new Fuzziness(4)))));
 
             return HandleSearchResponse(response);
         }
 
-        private IActionResult HandleSearchResponse(SearchResponse<MyDocDTO> response)
+        private IActionResult HandleSearchResponse(SearchResponse<Doc> response)
         {
             if (response.IsValidResponse)
             {
@@ -448,6 +469,6 @@ namespace ASP_Api_Demo.Controllers
             return StatusCode(500, new { message = "Failed to search documents", details = response.DebugInformation });
         }
 
-        */
+        
     }
 }
