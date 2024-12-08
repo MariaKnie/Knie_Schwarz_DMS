@@ -265,7 +265,7 @@ namespace ASP_Api_Demo.Controllers
             // Get ocrtext
             var response2 = await client.GetAsync($"/api/mydoc/{id}");
             var myDoc2 = await response2.Content.ReadFromJsonAsync<MyDocDTO>();
-            var doc2add = new Doc() { Id = id, OcrText = myDoc2.ocrtext };
+            var doc2add = new Doc() { Id = id, OcrText = myDoc2.ocrtext , Author = myDoc2.author, Title = myDoc2.title};
             // debug
 
             var indexResponse = await _elasticClient.IndexAsync(doc2add, idx =>
@@ -456,6 +456,8 @@ namespace ASP_Api_Demo.Controllers
                 .Index("documents")
                 .Query(q => q.Match(m => m
                     .Field(f => f.OcrText)
+                    .Field(f => f.Author)
+                    .Field(f => f.Title)
                     .Query(searchTerm)
                     .Fuzziness(new Fuzziness(2)))));
 

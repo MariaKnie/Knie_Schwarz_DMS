@@ -19,6 +19,8 @@ function fetchMyDocItems() {
                     <span class="block"> <strong>Title:</strong> ${myDoc.title} </span>
                     <span class="block"> <strong>Author:</strong> ${myDoc.author} </span>
                     <span class="block"> <strong>TextField:</strong> ${myDoc.textfield}</span>
+                    <span class="block"> <strong> OcrText: </strong> ${myDoc.ocrtext || "No ocrText"}</span>
+                    <span class="block"> <strong> Filename: </strong> ${myDoc.filename || "No file"}</span>
                     <br/>
                     <span>File: ${myDoc.filename || "No file uploaded"}</span>
                     <input type="file" id="fileInput${myDoc.id}" />
@@ -329,3 +331,60 @@ function submitDoc() {
     }
 }
 
+// Function to search and filter documents using Elasticsearch
+function filterDocList() {
+    const searchValue = document.getElementById('searchBar').value.trim().toLowerCase();
+
+    if (!searchValue) {
+        // If no search query, fetch all documents
+        fetchMyDocItems();
+    } else {
+        fetch(`${apiUrl}/search/querystring`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(searchValue) // Send the search term in the body
+        })
+            .then(response => response.json())
+            .then(data => {
+                const DocList = document.getElementById('myDocList');
+                DocList.innerHTML = ''; // Clear the list
+
+                if (data.length === 0) {
+                    DocList.innerHTML = '<p>No results found.</p>';
+                } else {
+                    // Loop over each document in search results
+                    data.forEach(Doc => {
+                        // Get DTO item for each result
+                        fetch(`${apiUrl}/${Doc.id}`)
+                            .then(response => response.json())
+                            .then(myDoc => {
+                                // Create list item for each mydoc
+                                const li = document.createElement('li');
+                                li.innerHTML = `
+                                    <span class="block"> <strong>ID:</strong> ${myDoc.id} </span>
+                                    <span class="block"> <strong>CreateDate:</strong> ${myDoc.createddate} </span>
+                                    <span class="block"> <strong>EditDate:</strong> ${myDoc.editeddate} </span>
+                                    <span class="block"> <strong>Title:</strong> ${myDoc.title} </span>
+                                    <span class="block"> <strong>Author:</strong> ${myDoc.author} </span>
+                                    <span class="block"> <strong>TextField:</strong> ${myDoc.textfield}</span>
+                                    <br/>
+                                    <span>File: ${myDoc.filename || "No file uploaded"}</span>
+                                    <button style="margin-left: 10px;" onclick="deleteTask(${myDoc.id})">Delete</button>
+                                `;
+                                DocList.appendChild(li);
+                            })
+                            .catch(error => {
+                                console.error('Error fetching document details:', error);
+                                alert('Error fetching document details');
+                            });
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching search results:', error);
+                alert('Error fetching search results');
+            });
+    }
+}

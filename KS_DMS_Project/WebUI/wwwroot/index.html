@@ -9,6 +9,14 @@
 <body>
     <h1>Doc List</h1>
 
+    <!-- Search Bar -->
+    <div class="search-container">
+        <input type="text"
+               id="searchBar"
+               placeholder="Search by title or author..."
+               onkeyup="filterDocList()">
+    </div>
+
     <!-- Error Div-->
     <div id="errorMessage" style="color: red;"></div>
 
@@ -38,7 +46,9 @@
         </div>
     </div>
 
-    <script src="/app.js"></script>
+    
+ 
 
+    <script src="/app.js"></script>
 </body>
 </html>
