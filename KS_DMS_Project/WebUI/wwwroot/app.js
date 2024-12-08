@@ -348,32 +348,53 @@ function filterDocList() {
         })
             .then(response => response.json())
             .then(data => {
+                console.log(data); // Log the response to inspect its structure
+
                 const DocList = document.getElementById('myDocList');
                 DocList.innerHTML = ''; // Clear the list
 
                 if (data.length === 0) {
                     DocList.innerHTML = '<p>No results found.</p>';
+                } else if (data.message) {
+                    // Handle the case when nothing is found
+                    DocList.innerHTML = `<p>${data.message}</p>`;
                 } else {
                     // Loop over each document in search results
                     data.forEach(Doc => {
-                        // Get DTO item for each result
+                        // Get the detailed document by its ID from the GET request
                         fetch(`${apiUrl}/${Doc.id}`)
                             .then(response => response.json())
                             .then(myDoc => {
-                                // Create list item for each mydoc
+                                // Create a list item for each document with full details
                                 const li = document.createElement('li');
                                 li.innerHTML = `
                                     <span class="block"> <strong>ID:</strong> ${myDoc.id} </span>
-                                    <span class="block"> <strong>CreateDate:</strong> ${myDoc.createddate} </span>
-                                    <span class="block"> <strong>EditDate:</strong> ${myDoc.editeddate} </span>
-                                    <span class="block"> <strong>Title:</strong> ${myDoc.title} </span>
-                                    <span class="block"> <strong>Author:</strong> ${myDoc.author} </span>
-                                    <span class="block"> <strong>TextField:</strong> ${myDoc.textfield}</span>
-                                    <br/>
-                                    <span>File: ${myDoc.filename || "No file uploaded"}</span>
-                                    <button style="margin-left: 10px;" onclick="deleteTask(${myDoc.id})">Delete</button>
+                    <span class="block"> <strong>CreateDate:</strong> ${myDoc.createddate} </span>
+                    <span class="block"> <strong>EditDate:</strong> ${myDoc.editeddate} </span>
+                    <span class="block"> <strong>Title:</strong> ${myDoc.title} </span>
+                    <span class="block"> <strong>Author:</strong> ${myDoc.author} </span>
+                    <span class="block"> <strong>TextField:</strong> ${myDoc.textfield}</span>
+                    <span class="block"> <strong> OcrText: </strong> ${myDoc.ocrtext || "No ocrText"}</span>
+                    <span class="block"> <strong> Filename: </strong> ${myDoc.filename || "No file"}</span>
+                    <br/>
+                    <span>File: ${myDoc.filename || "No file uploaded"}</span>
+                    <input type="file" id="fileInput${myDoc.id}" />
+                    <button style="margin-left: 10px;" onclick="uploadFile(${myDoc.id}, document.getElementById('fileInput${myDoc.id}'))">
+                        Upload File
+                    </button>
+                    ${myDoc.filename ? `
+                        <button class="delete" style="margin-left: 10px;" onclick="deleteFile(${myDoc.id}, '${myDoc.filename}')">
+                             Delete File
+                        </button>
+                        <button class="download" style="margin-left: 10px;" onclick="downloadFile(${myDoc.id}, '${myDoc.filename}')">
+                             Download File
+                        </button>
+                        ` : ''}
+                    <br/>
+                    <button class="delete" style="margin-left: 10px;" onclick="deleteTask(${myDoc.id})">Delete</button>
+
                                 `;
-                                DocList.appendChild(li);
+                                DocList.appendChild(li); // Append the list item to the UI
                             })
                             .catch(error => {
                                 console.error('Error fetching document details:', error);
