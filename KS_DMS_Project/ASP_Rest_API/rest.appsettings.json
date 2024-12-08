@@ -11,10 +11,10 @@
         }
     },
     "ElasticSettings": {
-        "Url": "http://localhost:9200",
+        "Url": "http://elasticsearch:9200",
         "DefaultIndex": "documents",
-        "Username": "", 
-        "Password":  ""
+        "Username": "",
+        "Password": ""
     },
     "AllowedHosts": "*"
 }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Options;
 using System.Reflection.Metadata;
 using ASP_Rest_API.SearchItems;
+using Elastic.Transport;
 
 namespace ASP_Rest_API.Services
 {
@@ -15,9 +16,9 @@ namespace ASP_Rest_API.Services
         public ElasticService(IOptions<ElasticSettings> optionsMonitor)
         {
             _elasticSettings = optionsMonitor.Value;
-            var settings = new ElasticsearchClientSettings(new Uri(_elasticSettings.Url))
-                //.Authentication()
-                .DefaultIndex(_elasticSettings.DefaultIndex);
+            var settings = new ElasticsearchClientSettings(new Uri("http://elasticsearch:9200"))
+                .Authentication(new BasicAuthentication("", ""))
+                .DefaultIndex("documents");
 
             _client = new ElasticsearchClient(settings);
         }
@@ -30,11 +31,17 @@ namespace ASP_Rest_API.Services
 
         public async Task<bool> AddOrUpdate(Doc document)
         {
-            var responce = await _client.IndexAsync(document, idx =>
-            idx.Index(_elasticSettings.DefaultIndex)
+            var response = await _client.IndexAsync(document, idx =>
+            idx.Index("documents")
                 .OpType(OpType.Index));
-            
-            return responce.IsValidResponse;
+            if (!response.IsValidResponse)
+            {
+                // Log the error for better debugging
+                Console.WriteLine($"Failed to index document: {response.DebugInformation}");
+                return false;
+            }
+
+            return response.IsValidResponse;
         }
 
         public async Task<bool> AddOrUpdateBulk(IEnumerable<Doc> documents, string indexName)

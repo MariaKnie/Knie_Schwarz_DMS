@@ -29,13 +29,13 @@ namespace ASP_Api_Demo.Controllers
         private readonly IConnection _connection;
         private readonly IModel _channel;
         private readonly IMinioClient _minioClient;
-        private readonly ElasticService _elasticService;
+        private readonly IElasticService _elasticService;
         private const string BucketName = "uploads";
 
         private static readonly ILog log = LogManager.GetLogger(typeof(MyDocController));
 
         private readonly IMessageQueueService _messageQueueService;
-        public MyDocController(IHttpClientFactory httpClientFactory, IMapper mapper, IMessageQueueService messageQueueService, ElasticService elasticService)
+        public MyDocController(IHttpClientFactory httpClientFactory, IMapper mapper, IMessageQueueService messageQueueService, IElasticService elasticService)
         {
             _httpClientFactory = httpClientFactory;
             _mapper = mapper;

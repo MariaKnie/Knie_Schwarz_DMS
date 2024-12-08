@@ -9,6 +9,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8081
+    networks:
+      - elastic
     depends_on:
       - mydocdal
       - rabbitmq
@@ -24,6 +26,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "80:80"
+    networks:
+      - elastic
     volumes:
       - ./WebUI/nginx.conf:/etc/nginx/nginx.conf
       - ./WebUI/wwwroot:/app/wwwroot
@@ -38,6 +42,8 @@ services:
       POSTGRES_DB: postgres
     ports:
       - "5432:5432"
+    networks:
+      - elastic
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -53,6 +59,8 @@ services:
       dockerfile: ./MyDocDAL/Dockerfile
     ports:
       - "8082:8082"
+    networks:
+      - elastic
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8082
@@ -66,6 +74,8 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    networks:
+      - elastic
     volumes:
       - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
     environment:
@@ -79,6 +89,8 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - rabbitmq
+    networks:
+      - elastic
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     volumes:
@@ -115,6 +127,8 @@ services:
     ports:
       - "9000:9000"
       - "9001:9001"
+    networks:
+      - elastic
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
