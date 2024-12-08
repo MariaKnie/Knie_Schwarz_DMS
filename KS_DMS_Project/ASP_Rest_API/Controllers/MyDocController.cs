@@ -261,7 +261,7 @@ namespace ASP_Api_Demo.Controllers
             }
 
             //used to debug
-            Thread.Sleep(1000);
+            //Thread.Sleep(1000);
             // Get ocrtext
             var response2 = await client.GetAsync($"/api/mydoc/{id}");
             var myDoc2 = await response2.Content.ReadFromJsonAsync<MyDocDTO>();
@@ -271,12 +271,19 @@ namespace ASP_Api_Demo.Controllers
             var indexResponse = await _elasticClient.IndexAsync(doc2add, idx =>
             idx.Index("documents")
                 .OpType(OpType.Index));
-            if (indexResponse.IsValidResponse)
-            {
-                return Ok(new { message = "Document indexed successfully" });
-            }
-            return StatusCode(500, new { message = "Failed to index document", details = indexResponse.DebugInformation });
 
+            //if (indexResponse.IsValidResponse)
+            //{
+            //    return Ok(new { message = "Document indexed successfully" });
+            //}
+            //return StatusCode(500, new { message = "Failed to index document", details = indexResponse.DebugInformation });
+
+            var updateResponse = await client.PutAsJsonAsync($"/api/mydoc/{id}", myDocDto);
+            if (!updateResponse.IsSuccessStatusCode)
+            {
+                log.Error("Fehler beim Speichern des Dateinamens für Doc " + id);
+                return StatusCode((int)updateResponse.StatusCode, $"Fehler beim Speichern des Dateinamens für Doc {id}");
+            }
 
             return Ok(new { message = $"Dateiname {docFile.FileName} für Doc {id} erfolgreich gespeichert." });
         }
@@ -431,7 +438,7 @@ namespace ASP_Api_Demo.Controllers
 
             var response = await _elasticClient.SearchAsync<Doc>(s => s
                 .Index("documents")
-                .Query(q => q.QueryString(qs => qs.Query($"{searchTerm}"))));
+                .Query(q => q.QueryString(qs => qs.Query($"*{searchTerm}*"))));
 
             return HandleSearchResponse(response);
         }
@@ -450,7 +457,7 @@ namespace ASP_Api_Demo.Controllers
                 .Query(q => q.Match(m => m
                     .Field(f => f.OcrText)
                     .Query(searchTerm)
-                    .Fuzziness(new Fuzziness(4)))));
+                    .Fuzziness(new Fuzziness(2)))));
 
             return HandleSearchResponse(response);
         }
