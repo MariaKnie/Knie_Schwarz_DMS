@@ -1,6 +1,6 @@
 ﻿const apiUrl = 'http://localhost:8081/mydoc'; // before /MyDoc
 
-// Function to fetch and display MyDoc items
+// Function to fetch // Function to fetch and display MyDoc items
 function fetchMyDocItems() {
     console.log('Fetching MyDoc items...');
     fetch(apiUrl)
@@ -9,9 +9,8 @@ function fetchMyDocItems() {
             const DocList = document.getElementById('myDocList');
             DocList.innerHTML = ''; // Clear the list before appending new items
             data.forEach(myDoc => {
-
-                // Create list item with delete and toggle complete buttons
-                const li = document.createElement('li'); //| Completed: ${task.isComplete} <button style="margin-left: 10px;" onclick="toggleComplete(${myDoc.id}, ${myDoc.isComplete}, '${myDoc.title}')">  Mark as ${ myDoc.isComplete ? 'Incomplete' : 'Complete' }
+                const li = document.createElement('li');
+                li.id = `doc-${myDoc.id}`; // Set unique id for each <li>
                 li.innerHTML = `
                     <span class="block"> <strong>ID:</strong> ${myDoc.id} </span>
                     <span class="block"> <strong>CreateDate:</strong> ${myDoc.createddate} </span>
@@ -19,31 +18,22 @@ function fetchMyDocItems() {
                     <span class="block"> <strong>Title:</strong> ${myDoc.title} </span>
                     <span class="block"> <strong>Author:</strong> ${myDoc.author} </span>
                     <span class="block"> <strong>TextField:</strong> ${myDoc.textfield}</span>
-                    <span class="block"> <strong> OcrText: </strong> ${myDoc.ocrtext || "No ocrText"}</span>
-                    <span class="block"> <strong> Filename: </strong> ${myDoc.filename || "No file"}</span>
+                    <span class="block"> <strong>OcrText:</strong> ${myDoc.ocrtext || "No ocrText"}</span>
+                    <span class="block"> <strong>Filename:</strong> ${myDoc.filename || "No file"}</span>
                     <br/>
-                    <span>File: ${myDoc.filename || "No file uploaded"}</span>
                     <input type="file" id="fileInput${myDoc.id}" />
-                    <button style="margin-left: 10px;" onclick="uploadFile(${myDoc.id}, document.getElementById('fileInput${myDoc.id}'))">
-                        Upload File
-                    </button>
+                    <button style="margin-left: 10px;" onclick="uploadFile(${myDoc.id}, document.getElementById('fileInput${myDoc.id}'))">Upload File</button>
                     ${myDoc.filename ? `
-                        <button class="delete" style="margin-left: 10px;" onclick="deleteFile(${myDoc.id}, '${myDoc.filename}')">
-                             Delete File
-                        </button>
-                        <button class="download" style="margin-left: 10px;" onclick="downloadFile(${myDoc.id}, '${myDoc.filename}')">
-                             Download File
-                        </button>
-                        ` : ''}
+                        <button class="delete" style="margin-left: 10px;" onclick="deleteFile(${myDoc.id}, '${myDoc.filename}')">Delete File</button>
+                        <button class="download" style="margin-left: 10px;" onclick="downloadFile(${myDoc.id}, '${myDoc.filename}')">Download File</button>
+                    ` : ''}
                     <br/>
                     <button class="delete" style="margin-left: 10px;" onclick="deleteTask(${myDoc.id})">Delete</button>
-
                 `;
-
                 DocList.appendChild(li);
             });
         })
-        .catch(error => console.error('Fehler beim Abrufen der MyDoc-Items:', error));
+        .catch(error => console.error('Error fetching MyDoc items:', error));
 }
 
 function uploadFile(Id, fileInput) {
@@ -112,7 +102,7 @@ function deleteFile(id, filename) {
     })
         .then(response => {
             if (response.ok) {
-                fetchMyDocItems(); 
+                fetchMyDocItems();
                 alert("File deleted successfully from DAL.");
             } else {
                 console.error('Error while deleting the file from DAL.');
@@ -163,7 +153,7 @@ function addDoc() {
         author: docAuthor,
         Textfield: docTextfield
     };
-        //isComplete: isComplete
+    //isComplete: isComplete
 
     fetch(apiUrl, {
         method: 'POST',
@@ -331,75 +321,47 @@ function submitDoc() {
     }
 }
 
-// Function to search and filter documents using Elasticsearch
+
+
+// Function to filter and display documents
 function filterDocList() {
     const searchValue = document.getElementById('searchBar').value.trim().toLowerCase();
+    const allItems = document.querySelectorAll('#myDocList li');
+    const DocList = document.getElementById('myDocList');
+    const filtertext = document.getElementById('filter');
 
-    if (!searchValue) {
-        // If no search query, fetch all documents
-        fetchMyDocItems();
-    } else {
+    // Hide all list items initially
+    allItems.forEach(item => {
+        item.style.display = 'none';
+    });
+
+    filtertext.innerHTML = "";
+
+    if (searchValue) {
         fetch(`${apiUrl}/search/querystring`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(searchValue) // Send the search term in the body
+            body: JSON.stringify(searchValue) // Wrap the search term in an object
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data); // Log the response to inspect its structure
 
-                const DocList = document.getElementById('myDocList');
-                DocList.innerHTML = ''; // Clear the list
+                console.log(data.stringify)
 
                 if (data.length === 0) {
-                    DocList.innerHTML = '<p>No results found.</p>';
+                    filtertext.innerHTML = '<p>No results found.</p>';
                 } else if (data.message) {
                     // Handle the case when nothing is found
-                    DocList.innerHTML = `<p>${data.message}</p>`;
+                    filtertext.innerHTML = '<p>No results found.</p>';
                 } else {
-                    // Loop over each document in search results
-                    data.forEach(Doc => {
-                        // Get the detailed document by its ID from the GET request
-                        fetch(`${apiUrl}/${Doc.id}`)
-                            .then(response => response.json())
-                            .then(myDoc => {
-                                // Create a list item for each document with full details
-                                const li = document.createElement('li');
-                                li.innerHTML = `
-                                    <span class="block"> <strong>ID:</strong> ${myDoc.id} </span>
-                    <span class="block"> <strong>CreateDate:</strong> ${myDoc.createddate} </span>
-                    <span class="block"> <strong>EditDate:</strong> ${myDoc.editeddate} </span>
-                    <span class="block"> <strong>Title:</strong> ${myDoc.title} </span>
-                    <span class="block"> <strong>Author:</strong> ${myDoc.author} </span>
-                    <span class="block"> <strong>TextField:</strong> ${myDoc.textfield}</span>
-                    <span class="block"> <strong> OcrText: </strong> ${myDoc.ocrtext || "No ocrText"}</span>
-                    <span class="block"> <strong> Filename: </strong> ${myDoc.filename || "No file"}</span>
-                    <br/>
-                    <span>File: ${myDoc.filename || "No file uploaded"}</span>
-                    <input type="file" id="fileInput${myDoc.id}" />
-                    <button style="margin-left: 10px;" onclick="uploadFile(${myDoc.id}, document.getElementById('fileInput${myDoc.id}'))">
-                        Upload File
-                    </button>
-                    ${myDoc.filename ? `
-                        <button class="delete" style="margin-left: 10px;" onclick="deleteFile(${myDoc.id}, '${myDoc.filename}')">
-                             Delete File
-                        </button>
-                        <button class="download" style="margin-left: 10px;" onclick="downloadFile(${myDoc.id}, '${myDoc.filename}')">
-                             Download File
-                        </button>
-                        ` : ''}
-                    <br/>
-                    <button class="delete" style="margin-left: 10px;" onclick="deleteTask(${myDoc.id})">Delete</button>
-
-                                `;
-                                DocList.appendChild(li); // Append the list item to the UI
-                            })
-                            .catch(error => {
-                                console.error('Error fetching document details:', error);
-                                alert('Error fetching document details');
-                            });
+                    // Loop over search results and display matching items
+                    data.forEach(resultDoc => {
+                        const matchingItem = document.getElementById(`doc-${resultDoc.id}`);
+                        if (matchingItem) {
+                            matchingItem.style.display = ''; // Show the matching item
+                        }
                     });
                 }
             })
@@ -407,5 +369,10 @@ function filterDocList() {
                 console.error('Error fetching search results:', error);
                 alert('Error fetching search results');
             });
+    } else {
+        // Show all items if search bar is empty
+        allItems.forEach(item => {
+            item.style.display = '';
+        });
     }
 }

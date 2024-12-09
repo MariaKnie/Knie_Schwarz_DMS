@@ -312,14 +312,14 @@ namespace ASP_Api_Demo.Controllers
         {
             
             var client = _httpClientFactory.CreateClient("MyDocDAL");
-
+            /*
             var response1 = await client.GetAsync($"/api/mydoc/{id}");
 
             var item = await response1.Content.ReadFromJsonAsync<MyDoc>();
             if (item != null)
             {
                 var dtoItem = _mapper.Map<MyDocDTO>(item);
-                if(dtoItem.filename != null)
+                if(dtoItem.filename != null && dtoItem.filename != "")
                 {
                     try
                     {
@@ -334,17 +334,20 @@ namespace ASP_Api_Demo.Controllers
                     }
                 }
             }
-            
+            */
             var response = await client.DeleteAsync($"/api/mydoc/{id}");
 
             if (response.IsSuccessStatusCode)
             {
-                return NoContent();
+                return Ok(new { message = $"Doc Item erfolgreich gelöscht." });
             }
-
-            log.Error("Error deleting MyDoc item from DAL in Delete ID:" + id);
-            return StatusCode((int)response.StatusCode, "Error deleting MyDoc item from DAL");
+            else
+            {
+                log.Error("Error deleting MyDoc item from DAL in Delete ID:" + id);
+                return StatusCode((int)response.StatusCode, "Error deleting MyDoc item from DAL");
+            }        
         }
+
         // Delete from Minio
         [HttpDelete("delete/{fileName}")]
         public async Task<IActionResult> DeleteFileFromMinio(string fileName)
