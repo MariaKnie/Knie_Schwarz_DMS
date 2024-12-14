@@ -15,17 +15,22 @@
 </head>
 <body>
     <div class="container-fluid">
-        <div class="row">
+        <div class="row justify-content-center">
             <!-- Search Bar -->
-            <div class="mb-3">
+            <div class="col-2 d-flex justify-content-end">
+                <!-- Toggle for showing errors -->
+                <button id="searchToggle" type="button" onclick="ToggleSearch()" class="btn btn-success">Wildcard Search</button>
+            </div>
+            <div class="col-7">
                 <div class="input-group">
-                    <input type="text" class="form-control" id="searchBar" placeholder="Search by title or author..." onkeyup="filterDocList()">
-                    <button class="btn btn-outline-secondary" type="button" onclick="filterDocList()">
-                        <i class="fas fa-search"></i>
+                    <input type="text" id="searchBar" placeholder="Search by title or author..." onkeyup="filterDocList()" class="m-1 p-2 form-control">
+                    <button type="button" onclick="filterDocList()" class=" m-1 btn btn-outline-secondary">
+                        <i class=" fas fa-search"></i>
                     </button>
                 </div>
             </div>
         </div>
+
         <div class="row">
             <!-- Add/Update Doc Form -->
             <div class="col-sm">
@@ -62,24 +67,21 @@
                 </form>
             </div>
 
-              <div class="col-2">
-                  </div>
+            <div class="col-2">
+            </div>
 
             <!-- Doc List -->
             <div class="col-6">
-                <div class=" d-flex justify-content-between p-2">
-
-                <h3 class="m-3">Doc List</h3>
-
-                <button class="btn btn-primary m-3" onclick="fetchMyDocItems()">
-                    <i class="fas fa-sync-alt"></i> Get List
-                </button>
+                <div class="d-flex justify-content-between p-2">
+                    <h3 class="m-3">Doc List</h3>
+                    <button class="btn btn-primary m-3" onclick="fetchMyDocItems()">
+                        <i class="fas fa-sync-alt"></i> Get List
+                    </button>
                 </div>
 
                 <div id="filter" style="color: red;"></div>
                 <!-- Doc List -->
                 <ul id="myDocList" class="list-group">
-
                 </ul>
             </div>
         </div>

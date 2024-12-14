@@ -1,5 +1,9 @@
 ﻿const apiUrl = 'http://localhost:8081/mydoc'; // before /MyDoc
+searchtype = false;
 
+
+// Load MyDoc items on page load
+document.addEventListener('DOMContentLoaded', fetchMyDocItems);
 
 // Function to fetch and display MyDoc items
 function fetchMyDocItems() {
@@ -290,8 +294,6 @@ function toggleComplete(id, isComplete, name) {
 }
 
 
-// Load MyDoc items on page load
-document.addEventListener('DOMContentLoaded', fetchMyDocItems);
 
 
 
@@ -346,8 +348,15 @@ function filterDocList() {
 
     filtertext.innerHTML = "";
 
+    searchstring = "querystring"
+
+    if (searchtype) {
+
+        searchstring = "fuzzy"
+    }
+
     if (searchValue) {
-        fetch(`${apiUrl}/search/querystring`, {
+        fetch(`${apiUrl}/search/${searchstring}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -357,7 +366,7 @@ function filterDocList() {
             .then(response => response.json())
             .then(data => {
 
-                console.log(data.stringify)
+                //console.log(data.stringify)
 
                 if (data.length === 0) {
                     filtertext.innerHTML = '<p>No results found.</p>';
@@ -482,4 +491,21 @@ function openEditPrompt(id, title, author, textfield) {
         document.body.removeChild(modal);
         document.body.removeChild(overlay);
     });
+}
+
+function ToggleSearch() {
+
+     searchtoggle = document.getElementById('searchToggle');
+
+    if (searchtype) {
+        searchtype = false;
+        searchtoggle.innerHTML = "Wildcard Search";
+
+    }
+    else {
+        searchtype = true;
+        searchtoggle.innerHTML = "Fuzzy Search";
+    }
+
+    filterDocList();
 }
