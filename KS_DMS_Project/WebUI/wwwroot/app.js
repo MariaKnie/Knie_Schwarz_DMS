@@ -1,6 +1,7 @@
 ﻿const apiUrl = 'http://localhost:8081/mydoc'; // before /MyDoc
 
-// Function to fetch // Function to fetch and display MyDoc items
+
+// Function to fetch and display MyDoc items
 function fetchMyDocItems() {
     console.log('Fetching MyDoc items...');
     fetch(apiUrl)
@@ -11,7 +12,14 @@ function fetchMyDocItems() {
             data.forEach(myDoc => {
                 const li = document.createElement('li');
                 li.id = `doc-${myDoc.id}`; // Set unique id for each <li>
+
+                li.style.borderRadius = '8px'; // Rounded corners
+                li.style.boxShadow = '0px 4px 6px rgba(0, 0, 0, 0.5)'; // Subtle shadow
+                li.style.padding = '15px'; // Padding inside the card
+                li.style.marginBottom = '10px'; // Space between cards
+
                 li.innerHTML = `
+                    <button class="edit" style="margin-left: 10px; float: right;" onclick="openEditPrompt(${myDoc.id}, '${myDoc.title}', '${myDoc.author}', '${myDoc.textfield}')">Edit</button>
                     <span class="block"> <strong>ID:</strong> ${myDoc.id} </span>
                     <span class="block"> <strong>CreateDate:</strong> ${myDoc.createddate} </span>
                     <span class="block"> <strong>EditDate:</strong> ${myDoc.editeddate} </span>
@@ -140,6 +148,7 @@ function addDoc() {
     const docTextfield = document.getElementById('DocTextField').value;
 
     const errorDiv = document.getElementById('errorMessage');//Div für Fehlermeldung
+    errorDiv.innerHTML = "";
 
     //const isComplete = document.getElementById('isComplete').checked;
 
@@ -375,4 +384,102 @@ function filterDocList() {
             item.style.display = '';
         });
     }
+}
+
+
+
+
+// Function to open a prompt for editing
+function openEditPrompt(id, title, author, textfield) {
+    // Create an overlay
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // Semi-transparent black
+    overlay.style.zIndex = '999';
+
+    // Create a modal
+    const modal = document.createElement('div');
+    modal.style.position = 'fixed';
+    modal.style.top = '50%';
+    modal.style.left = '50%';
+    modal.style.transform = 'translate(-50%, -50%)';
+    modal.style.background = '#525252'; // Grey background
+    modal.style.padding = '20px';
+    modal.style.borderRadius = '8px';
+    modal.style.boxShadow = '0px 4px 6px rgba(0, 0, 0, 0.1)';
+    modal.style.zIndex = '1000';
+    modal.style.width = '400px';
+
+    modal.innerHTML = `
+        <h3 class="mb-3">Add or Update Doc</h3>
+        <form>
+            <!-- Error Div -->
+            <div id="errorMessage" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label for="editTitle" class="form-label">Title</label>
+                <input type="text" class="form-control" id="editTitle" value="${title}" placeholder="Title">
+            </div>
+            <div class="mb-3">
+                <label for="editAuthor" class="form-label">Author</label>
+                <input type="text" class="form-control" id="editAuthor" value="${author}" placeholder="Author">
+            </div>
+            <div class="mb-3">
+                <label for="editTextfield" class="form-label">TextField</label>
+                <textarea class="form-control" id="editTextfield" placeholder="TextField" rows="3">${textfield}</textarea>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="submitEdit">Submit</button>
+            <button type="button" class="btn btn-secondary" id="cancelEdit">Cancel</button>
+        </form>
+    `;
+
+    // Append overlay and modal
+    document.body.appendChild(overlay);
+    document.body.appendChild(modal);
+
+    // Handle submit
+    document.getElementById('submitEdit').addEventListener('click', () => {
+        const updatedTitle = document.getElementById('editTitle').value;
+        const updatedAuthor = document.getElementById('editAuthor').value;
+        const updatedTextfield = document.getElementById('editTextfield').value;
+
+        const updatedDoc = {
+            id: id,
+            title: updatedTitle,
+            author: updatedAuthor,
+            Textfield: updatedTextfield
+        };
+
+        fetch(`${apiUrl}/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedDoc)
+        })
+            .then(response => {
+                if (response.ok) {
+                    fetchMyDocItems(); // Refresh the list
+                    alert('Document updated successfully!');
+                } else {
+                    alert('Error updating the document.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+
+        // Remove modal and overlay after submission
+        document.body.removeChild(modal);
+        document.body.removeChild(overlay);
+    });
+
+    // Handle cancel
+    document.getElementById('cancelEdit').addEventListener('click', () => {
+        document.body.removeChild(modal);
+        document.body.removeChild(overlay);
+    });
 }

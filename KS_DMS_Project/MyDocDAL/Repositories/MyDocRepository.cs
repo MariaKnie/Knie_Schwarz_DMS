@@ -8,7 +8,9 @@ namespace MyDocDAL.Repositories
     {
         public async Task<IEnumerable<MyDoc>> GetAllAsync()
         {
-            return await context.MyDocItems!.ToListAsync();
+            return await context.MyDocItems!
+                                .OrderByDescending(item => item.id)
+                                .ToListAsync();
         }
 
         public async Task<MyDoc> GetByIdAsync(int id)

@@ -4,53 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyDoc List</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <h1>Doc List</h1>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Search Bar -->
+            <div class="mb-3">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="searchBar" placeholder="Search by title or author..." onkeyup="filterDocList()">
+                    <button class="btn btn-outline-secondary" type="button" onclick="filterDocList()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Add/Update Doc Form -->
+            <div class="col-sm">
+                <h3 class="m-3">Add or Update Doc</h3>
+                <form>
+                    <!-- Error Div -->
+                    <div id="errorMessage" class="text-danger"></div>
 
-    <!-- Search Bar -->
-    <div class="search-container">
-        <input type="text"
-               id="searchBar"
-               placeholder="Search by title or author..."
-               onkeyup="filterDocList()">
+                    <div class="mb-3">
+                        <label for="DocTitle" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="DocTitle" placeholder="Title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="DocAuthor" class="form-label">Author</label>
+                        <input type="text" class="form-control" id="DocAuthor" placeholder="Author">
+                    </div>
+                    <div class="mb-3">
+                        <label for="DocTextField" class="form-label">TextField</label>
+                        <input type="text" class="form-control" id="DocTextField" placeholder="TextField">
+                    </div>
+
+                    <!-- Checkbox to toggle between Add and Update -->
+                    <div class="form-check mb-3">
+                        <input type="checkbox" class="form-check-input" id="isUpdate" onclick="toggleUpdateMode()">
+                        <label class="form-check-label" for="isUpdate">Update existing doc?</label>
+                    </div>
+
+                    <!-- ID input (hidden by default) -->
+                    <input type="text" id="DocID" class="form-control mb-3" placeholder="Doc ID" style="display:none;">
+
+                    <button id="docButton" type="button" class="btn btn-success" onclick="submitDoc()">
+                        <i class="fas fa-plus"></i> Add Doc
+                    </button>
+                </form>
+            </div>
+
+              <div class="col-2">
+                  </div>
+
+            <!-- Doc List -->
+            <div class="col-6">
+                <div class=" d-flex justify-content-between p-2">
+
+                <h3 class="m-3">Doc List</h3>
+
+                <button class="btn btn-primary m-3" onclick="fetchMyDocItems()">
+                    <i class="fas fa-sync-alt"></i> Get List
+                </button>
+                </div>
+
+                <div id="filter" style="color: red;"></div>
+                <!-- Doc List -->
+                <ul id="myDocList" class="list-group">
+
+                </ul>
+            </div>
+        </div>
     </div>
 
-    <!-- Error Div-->
-    <div id="errorMessage" style="color: red;"></div>
-
-    <!-- Container for form and list -->
-    <div class="container">
-        <!-- Form to add or update a doc -->
-        <div class="form-container">
-            <h3>Add or Update Doc</h3>
-            <input type="text" id="DocTitle" placeholder="Title">
-            <input type="text" id="DocAuthor" placeholder="Author">
-            <input type="text" id="DocTextField" placeholder="TextField">
-
-            <!-- Checkbox to toggle between Add and Update -->
-            <label for="isUpdate">Update existing doc?</label>
-            <input type="checkbox" id="isUpdate" onclick="toggleUpdateMode()">
-
-            <!-- ID input (hidden by default) -->
-            <input type="text" id="DocID" placeholder="Doc ID" style="display:none;">
-
-            <button id="docButton" onclick="submitDoc()">Add Doc</button>
-        </div>
-
-        <!-- Doc list -->
-        <div class="list-container">
-            <button onclick="fetchMyDocItems()">Get List</button>
-            <div id="filter" style="color: red;"></div>
-            <!-- Error Div-->
-            <ul id="myDocList"></ul>
-        </div>
-    </div>
-
-
-
-
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/app.js"></script>
 </body>
 </html>
